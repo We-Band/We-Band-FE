@@ -66,6 +66,8 @@
 │   ├── services/      # 비즈니스 로직 및 상태 관리 (예: context, recoil, zustand)
 │   ├── hooks/         # 커스텀 훅
 │   ├── utils/         # 유틸리티 함수
+│   ├── layout/        # 전역으로 사용할 디자인 양식 정의
+│   ├── styles/        # 전역으로 사용할 폰트, 색상 정의
 │   ├── App.js         # 루트 컴포넌트
 │   ├── main.js        # ReactDOM.render() 또는 createRoot() 설정
 │── .env               # 환경 변수 파일
