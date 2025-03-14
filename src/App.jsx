@@ -1,7 +1,7 @@
-import "./App.css";
+import './App.css';
 
 function App() {
-  return <>We-Bnad-Lite</>;
+  return <>We-Band-Lite</>;
 }
 
 export default App;
