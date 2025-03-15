@@ -1,0 +1,14 @@
+// Color
+$background-color: #ffffff;
+$font-base-color: #000000;
+
+// Font
+$default-font-family:
+  'SF Pro KR',
+  -apple-system;
+
+$font-base-size: clamp(
+  14px,
+  1vw,
+  18px
+); // 최소값: 14px, 유동값: 1vw(뷰포트의 1%), 최대값: 18px
