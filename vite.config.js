@@ -19,6 +19,7 @@ export default defineConfig({
       "@hooks": path.resolve(__dirname, "src/hooks"),
       "@api": path.resolve(__dirname, "src/api"),
       "@layout": path.resolve(__dirname, "src/layout"),
+      "@styles": path.resolve(__dirname, "src/styles"),
     },
   },
   plugins: [react()],
