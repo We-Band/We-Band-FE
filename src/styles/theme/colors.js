@@ -18,7 +18,7 @@ const colors = {
         gray900: '#171923',
     },
     Alpha: {
-        alpha: '#000000',
+        alpha: '#f97561',
     },
     WBOrange: {
         wbo50: '#ffedec',
