@@ -1,8 +1,13 @@
-@use 'variables' as V;
+@use 'variables' as v;
 
 body {
-  background-color: V.$background-color;
-  color: V.$font-base-color;
+  background-color: v.$background-color;
+  color: v.$font-base-color;
 
-  font-family: V.$default-font-family;
+  font-family: v.$default-font-family;
+
+  margin-left: v.$margin-base;
+  margin-right: v.$margin-base;
+
+  max-width: v.$max-width;
 }
