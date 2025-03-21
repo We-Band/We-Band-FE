@@ -2,8 +2,8 @@ import colors from './colors';
 import fontStyles from './typography';
 
 const theme = {
-    colors,
-    fontStyles,
+  colors,
+  fontStyles,
 };
 
 export default theme;
