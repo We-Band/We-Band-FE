@@ -1,0 +1,25 @@
+{
+  "include": ["src"],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@components/*": ["src/components/*"],
+      "@pages/*": ["src/pages/*"],
+      "@assets/*": ["src/assets/*"],
+      "@utils/*": ["src/utils/*"],
+      "@hooks/*": ["src/hooks/*"],
+      "@api/*": ["src/api/*"],
+      "@layout/*": ["src/layout/*"],
+      "@styles/*": ["src/styles/*"]
+    },
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "strict": true,
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  }
+}

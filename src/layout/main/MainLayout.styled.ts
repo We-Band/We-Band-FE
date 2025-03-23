@@ -5,6 +5,7 @@ export const MainLayoutContainer = styled.div``;
 
 export const Logo = styled.img.attrs({
   src: webandlogo,
+  alt: 'we-band-logo',
 })`
   cursor: pointer;
 `;
