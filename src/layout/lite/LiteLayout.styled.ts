@@ -5,6 +5,7 @@ export const LiteLayoutContainer = styled.div``;
 
 export const LiteLogo = styled.img.attrs({
   src: litelogo,
+  alt: 'lite-logo',
 })`
   cursor: pointer;
 `;
