@@ -4,20 +4,23 @@ import LiteLayout from '@layout/lite/LiteLayout';
 import MainLayout from '@layout/main/MainLayout';
 import Home from '@pages/Home';
 import Lite from '@pages/Lite';
+import * as S from './App.styled';
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route element={<LiteLayout />}>
-          <Route path="lite" element={<Lite />} />
-        </Route>
+    <S.AppContainer>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<LiteLayout />}>
+            <Route path="lite" element={<Lite />} />
+          </Route>
 
-        <Route element={<MainLayout />}>
-          <Route index element={<Home />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+          <Route element={<MainLayout />}>
+            <Route index element={<Home />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </S.AppContainer>
   );
 }
 

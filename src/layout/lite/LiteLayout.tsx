@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router';
 import * as S from './LiteLayout.styled';
 import { useNavigate } from 'react-router-dom';
+import LiteLogo from '@assets/logo/lite-logo.svg?react';
 
 const LiteLayout = () => {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ const LiteLayout = () => {
   return (
     <S.LiteLayoutContainer>
       <S.LogoContainer>
-        <S.LiteLogo onClick={handleClick} />
+        <LiteLogo onClick={handleClick} />
       </S.LogoContainer>
       <Outlet />
     </S.LiteLayoutContainer>

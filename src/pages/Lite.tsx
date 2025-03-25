@@ -1,5 +1,11 @@
+import OnBoardingLite from '@components/lite/OnBoardingLite';
+
 const Lite = () => {
-  return <>Lite page</>;
+  return (
+    <>
+      <OnBoardingLite />
+    </>
+  );
 };
 
 export default Lite;

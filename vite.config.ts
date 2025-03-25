@@ -21,6 +21,7 @@ export default defineConfig({
       '@api': path.resolve(__dirname, 'src/api'),
       '@layout': path.resolve(__dirname, 'src/layout'),
       '@styles': path.resolve(__dirname, 'src/styles'),
+      '@constants': path.resolve(__dirname, 'src/constants'),
     },
   },
   plugins: [react(), svgr()],
