@@ -20,7 +20,7 @@
 ```php
 <타입>/<이슈 번호>-<간단한 설명>
 
-- feature/1234-add-user-login
+- feat/1234-add-user-login
 - bugfix/5678-fix-login-error
 - release/1.2.0
 ```
@@ -28,7 +28,7 @@
 ### Branch Type
 
 - **feat/ - 새로운 기능 개발 시**
-- **bug/ -** **버그 수정** 시
+- **fix/ -** **버그 수정** 시
 - **hotfix/ -** **긴급한 버그 수정** 시 (보통 프로덕션 환경에서 발생)
 - **release/ -** **릴리즈 준비 시**
 - **chore/ -** 빌드 및 기타 작업 자동화, 문서 작업 등 **코드와 관련 없는 작업**
