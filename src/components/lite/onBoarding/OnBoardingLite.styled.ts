@@ -5,7 +5,6 @@ export const OnBoardingLiteContainer = styled.div`
   width: 100%;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
 
   margin-top: 72px;
   gap: 72px;
@@ -16,9 +15,9 @@ export const InstructionsContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: flex-start;
+  align-self: start;
 
-  padding: 12px 16px;
+  padding: 12px 0px 12px 48px;
   gap: 16px;
 `;
 
@@ -34,24 +33,38 @@ export const InstructionsText = styled.p`
 // date picker
 export const DatePickerContainer = styled.div`
   display: flex;
-  width: 100%;
-  justify-content: center;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+  width: 300px;
+
+  margin: 0 auto;
+  gap: auto;
+`;
+
+export const YearToggle = styled.div`
+  display: flex;
   align-items: center;
 
-  gap: 60px;
+  gap: 8px;
+`;
+
+export const YearText = styled.h2`
+  ${({ theme }) => theme.fontStyles.T04_Bold};
 `;
 
 export const MonthPicker = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  width: 100%;
+  width: max-content;
 
   gap: 16px;
 `;
 
 export const DatePicker = styled(MonthPicker)`
   justify-content: flex-start;
+  width: max-content;
 `;
 
 export const MonthText = styled.h2`
@@ -81,7 +94,6 @@ export const MonthDropBox = styled.div`
   padding: 8px;
   gap: 8px;
   box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.25);
-  cursor: pointer;
 `;
 
 interface MonthDropItemProps {

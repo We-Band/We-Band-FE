@@ -11,7 +11,8 @@
       "@api/*": ["src/api/*"],
       "@layout/*": ["src/layout/*"],
       "@styles/*": ["src/styles/*"],
-      "@constants/*": ["src/constants/*"]
+      "@constants/*": ["src/constants/*"],
+      "@icons/*": ["src/icons/*"]
     },
     "target": "ESNext",
     "useDefineForClassFields": true,

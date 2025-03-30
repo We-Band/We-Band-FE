@@ -12,7 +12,9 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route element={<LiteLayout />}>
-            <Route path="lite" element={<Lite />} />
+            <Route path="lite/*" element={<Lite />}>
+              <Route path="*" element={<Lite />} />
+            </Route>
           </Route>
 
           <Route element={<MainLayout />}>
