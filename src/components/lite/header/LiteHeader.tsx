@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { LiteEditSchedule, InputUserName } from '@icons/Input';
 import Alert from '@components/alert/Alert';
 import { useNavigate } from 'react-router-dom';
-import { useLiteContext } from '../LiteHome';
+import { useLiteContext } from '@components/lite/LiteHome';
 import UserTable from '../userTable/UserTable';
 import { cannotUseSpecialChar, setSchedule, urlCopied } from '@constants/alert';
 
@@ -60,6 +60,7 @@ const LiteHeader: React.FC<LiteHeaderProps> = ({
       '',
     );
 
+    localStorage.setItem('alertCopyUrl', JSON.stringify(true));
     // 새로운 경로 생성 및 이동
     navigate(`${updatedPath}/${userName}-${encodedSchedule}`);
   };

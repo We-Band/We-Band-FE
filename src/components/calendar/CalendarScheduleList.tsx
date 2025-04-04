@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as S from './Calendar.styled';
 import { BLOCKNUM, WEEK } from '@constants/time';
-import { LiteContext, useLiteContext } from '@components/lite/LiteHome';
-import { decode, encode } from '@utils/urlHandle';
+import { useLiteContext } from '@components/lite/LiteHome';
+import { encode } from '@utils/urlHandle';
 
 interface CalendarScheduleProps {
   totalUser: number;

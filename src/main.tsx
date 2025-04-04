@@ -10,8 +10,8 @@ import '@styles/global/global.scss';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
+    <Analytics />
     <ThemeProvider theme={theme}>
-      <Analytics />
       <App />
     </ThemeProvider>
   </StrictMode>,

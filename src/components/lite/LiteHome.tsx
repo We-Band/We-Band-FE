@@ -1,9 +1,10 @@
-import { ReactNode, useContext } from 'react';
+import { ReactNode, useContext, useEffect } from 'react';
 import { createContext } from 'react';
 import LiteHeader from './header/LiteHeader';
 import LiteCalendar from '@components/calendar/LiteCalendar';
 import * as S from './LiteHome.styled';
 import { useState } from 'react';
+import AlertUrlCopy from './alertUrlCopy/AlertUrlCopy';
 
 interface LiteContextType {
   encodedSchedule: string;
@@ -47,10 +48,18 @@ const LiteProvider = ({ children }: { children: ReactNode }) => {
 
 const LiteHome = () => {
   const [userToggle, setUserToggle] = useState(false);
+  const alertCopyUrl = JSON.parse(
+    localStorage.getItem('alertCopyUrl') || 'false',
+  );
+
+  useEffect(() => {
+    localStorage.setItem('alertCopyUrl', JSON.stringify(alertCopyUrl));
+  }, [alertCopyUrl]);
 
   return (
     <S.LiteHomeContainer>
       <LiteProvider>
+        {alertCopyUrl && <AlertUrlCopy />}
         <LiteHeader userToggle={userToggle} setUserToggle={setUserToggle} />
         <LiteCalendar userToggle={userToggle} />
       </LiteProvider>
