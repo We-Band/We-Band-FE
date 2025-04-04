@@ -1,5 +1,5 @@
 import { parsePathToUserData } from '@utils/urlHandle';
-import * as S from './userTable.styled';
+import * as S from './UserTable.styled';
 import { useLiteContext } from '@components/lite/LiteHome';
 
 const UserTable = () => {
