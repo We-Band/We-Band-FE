@@ -9,7 +9,7 @@ const fadeInOut = keyframes`
 
 export const AlertContainer = styled.div`
   background: ${({ theme }) => theme.colors.BlackAlpha[700]};
-  position: absolute;
+  position: fixed;
 
   display: flex;
   width: 360px;
@@ -22,6 +22,8 @@ export const AlertContainer = styled.div`
   border-radius: 12px;
 
   animation: ${fadeInOut} 3s ease-in-out;
+  left: 50%;
+  transform: translateX(-50%);
 `;
 
 export const AlertText = styled.p<{ $highlight: boolean }>`
