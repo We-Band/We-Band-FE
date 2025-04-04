@@ -21,7 +21,7 @@ const LiteHeader: React.FC<LiteHeaderProps> = ({
 }) => {
   const navigate = useNavigate();
   const [userName, setUserName] = useState('');
-  const { encodedSchedule, selectedUser, setAlertCopyUrl } = useLiteContext();
+  const { encodedSchedule, selectedUser } = useLiteContext();
   const [toggleUserBox, setToggleUserBox] = useState(false);
 
   const [alert, setAlert] = useState(false);
@@ -60,7 +60,7 @@ const LiteHeader: React.FC<LiteHeaderProps> = ({
       '',
     );
 
-    setAlertCopyUrl(true);
+    localStorage.setItem('alertCopyUrl', JSON.stringify(true));
     // 새로운 경로 생성 및 이동
     navigate(`${updatedPath}/${userName}-${encodedSchedule}`);
   };

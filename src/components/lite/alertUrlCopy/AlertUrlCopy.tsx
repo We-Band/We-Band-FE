@@ -3,6 +3,10 @@ import * as S from './AlertUrlCopy.styled';
 
 const AlertUrlCopy = () => {
   const url = window.location.href;
+  const handleClick = () => {
+    localStorage.setItem('alertCopyUrl', JSON.stringify(false));
+    window.location.reload();
+  };
 
   return (
     <S.AlertCopyUrlBackgroud>
@@ -21,7 +25,7 @@ const AlertUrlCopy = () => {
             해 보세요!
           </S.UrlInstruction>
         </S.UrlInstructionContainer>
-        <S.AlertUrlButton>확인</S.AlertUrlButton>
+        <S.AlertUrlButton onClick={handleClick}>확인</S.AlertUrlButton>
       </S.AlertCopyUrlContainer>
     </S.AlertCopyUrlBackgroud>
   );
