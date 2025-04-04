@@ -53,6 +53,10 @@ const DatePicker: React.FC = () => {
   }, [toggle]);
 
   const handleClick = () => {
+    if (date < FIRSTDAY) {
+      navigate(encodeDate(year, MonthToNum(month) + 1, date + 1));
+      return;
+    }
     navigate(encodeDate(year, MonthToNum(month) + 1, date));
   };
 
