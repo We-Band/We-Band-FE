@@ -8,3 +8,7 @@ export const ArrowDownPickUser = styled(ArrowDown)`
   height: 20px;
   aspect-ratio: 1/1;
 `;
+
+export const ArrowUpPickUser = styled(ArrowDownPickUser)`
+  rotate: 180deg;
+`;

@@ -18,6 +18,9 @@ const colors = {
   Alpha: {
     alpha: '#f97561',
   },
+  BlackAlpha: {
+    700: 'rgba(0, 0, 0, 0.64)',
+  },
   WBOrange: {
     wbo50: '#ffedec',
     wbo100: '#ffded9',

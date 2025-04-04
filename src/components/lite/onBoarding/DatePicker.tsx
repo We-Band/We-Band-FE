@@ -1,8 +1,14 @@
 import { ArrowDownOnBoardingLite } from '@icons/Arrows';
 import * as S from './OnBoardingLite.styled';
 
-import { useEffect, useState } from 'react';
-import { MONTHNAMES, FIRSTDAY, MonthToNum, NumToMonth } from '@utils/date';
+import { useEffect, useRef, useState } from 'react';
+import {
+  MONTHNAMES,
+  FIRSTDAY,
+  MonthToNum,
+  NumToMonth,
+  encodeDate,
+} from '@utils/date';
 import { useNavigate } from 'react-router-dom';
 import { ToggleOffOnBoardingLite, ToggleOnOnBoardingLite } from '@icons/Button';
 
@@ -16,11 +22,12 @@ const DatePicker: React.FC = () => {
 
   const [year, setYear] = useState(today.getFullYear());
   const [month, setMonth] = useState(NumToMonth(today.getMonth()));
-  const [date, setDate] = useState(FIRSTDAY);
+  const [date, setDate] = useState(today.getDate());
   const [dropBoxToggle, setDropBoxToggle] = useState(false);
   const [monthNum, setMonthNum] = useState(MonthToNum(month));
   const [maxDay, setMaxDay] = useState(getMaxDaysInMonth(year, monthNum));
-  const [toggle, setToggle] = useState(false);
+  const [toggle, setToggle] = useState(true);
+  const isInitialMount = useRef(true);
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(e.target.value);
@@ -35,19 +42,18 @@ const DatePicker: React.FC = () => {
   };
 
   useEffect(() => {
-    setDate(FIRSTDAY); //연도나 달이 변하면 1일로 초기화
-    setMonthNum(MonthToNum(month));
-    setMaxDay(getMaxDaysInMonth(year, monthNum));
+    const numericMonth = MonthToNum(month);
+    setMonthNum(numericMonth);
+    setMaxDay(getMaxDaysInMonth(year, numericMonth));
   }, [year, month]);
 
   useEffect(() => {
     const currentYear = today.getFullYear();
     setYear(toggle ? currentYear : currentYear + 1);
-    console.log(year);
   }, [toggle]);
 
   const handleClick = () => {
-    navigate(`${year}-${MonthToNum(month)}-${date}`);
+    navigate(encodeDate(year, MonthToNum(month) + 1, date));
   };
 
   return (
