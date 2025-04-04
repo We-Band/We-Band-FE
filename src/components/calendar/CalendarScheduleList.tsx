@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import * as S from './Calendar.styled';
 import { BLOCKNUM, WEEK } from '@constants/time';
-import { LiteContext } from '@components/lite/LiteHome';
+import { LiteContext, useLiteContext } from '@components/lite/LiteHome';
 import { decode, encode } from '@utils/urlHandle';
 
 interface CalendarScheduleProps {
@@ -16,7 +16,7 @@ const CalendarScheduleList: React.FC<CalendarScheduleProps> = ({
   edit,
 }) => {
   const [scheduleString, setScheduleString] = useState(initialScheduleString);
-  const { setEncodedSchedule } = useContext(LiteContext);
+  const { setEncodedSchedule } = useLiteContext();
 
   const toggleSchedule = (weekIdx: number, sectionIdx: number, pos: number) => {
     const index = weekIdx * 30 + sectionIdx * 2 + pos;

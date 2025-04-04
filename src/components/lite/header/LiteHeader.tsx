@@ -1,14 +1,14 @@
 import * as S from './LiteHeader.styled';
 import { CopyUrlLite } from '@icons/CopyUrl';
-import AddIcon from '@assets/icons/add.svg?react';
+import { LiteUserAddIcon } from '@icons/AddIcon';
 import { ArrowDownPickUser, ArrowUpPickUser } from '@icons/Arrows';
-import { useContext, useEffect, useState } from 'react';
-import { InputUserName } from '@icons/Input';
+import { useEffect, useState } from 'react';
+import { LiteEditSchedule, InputUserName } from '@icons/Input';
 import Alert from '@components/alert/Alert';
 import { useNavigate } from 'react-router-dom';
-import { LiteContext } from '../LiteHome';
+import { useLiteContext } from '../LiteHome';
 import UserTable from '../userTable/userTable';
-import { BLANK } from '@constants/blank';
+import { cannotUseSpecialChar, setSchedule, urlCopied } from '@constants/alert';
 
 interface LiteHeaderProps {
   userToggle: boolean;
@@ -21,19 +21,19 @@ const LiteHeader: React.FC<LiteHeaderProps> = ({
 }) => {
   const navigate = useNavigate();
   const [userName, setUserName] = useState('');
-  const { encodedSchedule } = useContext(LiteContext);
+  const { encodedSchedule, selectedUser } = useLiteContext();
   const [toggleUserBox, setToggleUserBox] = useState(false);
 
-  const [alertAddUser, setAlertAddUser] = useState(false);
-  const [alertURLCopy, setAlertURLCopy] = useState(false);
-  const [alertSelectTime, setAlertSelectTime] = useState(false);
+  const [alert, setAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState(['']);
 
   const handleCopy = () => {
     const currentUrl = window.location.href;
     navigator.clipboard
       .writeText(currentUrl)
       .then(() => {
-        setAlertURLCopy(true);
+        setAlert(true);
+        setAlertMessage(urlCopied);
       })
       .catch((err) => {
         console.error('Error copying text: ', err);
@@ -45,10 +45,25 @@ const LiteHeader: React.FC<LiteHeaderProps> = ({
     const safeUserName = userName.replace(reg, '');
 
     if (userName !== safeUserName) {
-      setAlertAddUser(true);
+      setAlert(true);
+      setAlertMessage(cannotUseSpecialChar);
       return;
     }
-    navigate(`${userName}-${encodedSchedule}`);
+
+    // 현재 URL 가져오기
+    const currentPath = window.location.pathname;
+    const encodedUserName = encodeURIComponent(userName); // userName을 URL 인코딩
+
+    // 기존 'encodedUserName-encodedSchedule' 패턴을 찾아 제거
+    const updatedPath = currentPath.replace(
+      new RegExp(`/${encodedUserName}-[^/]+`),
+      '',
+    );
+    console.log('currentPath', currentPath);
+    console.log('updatedPath', updatedPath);
+
+    // 새로운 경로 생성 및 이동
+    navigate(`${updatedPath}/${userName}-${encodedSchedule}`);
   };
 
   const handleToggle = () => {
@@ -57,34 +72,19 @@ const LiteHeader: React.FC<LiteHeaderProps> = ({
 
   useEffect(() => {
     if (userToggle) {
-      setAlertSelectTime(true);
+      setAlert(true);
+      setAlertMessage(setSchedule);
     }
   }, [userToggle]);
 
+  useEffect(() => {
+    setUserName(selectedUser);
+  }, [selectedUser]);
+
   return (
     <S.LiteHeaderContainer>
-      {alertURLCopy && (
-        <Alert
-          messages={['URL', '이 복사되었어요. 일정을 공유해 보세요.']}
-          onClose={() => setAlertURLCopy(!alertURLCopy)}
-        />
-      )}
-      {alertAddUser && (
-        <Alert
-          messages={[
-            '',
-            `이름에${BLANK}`,
-            '특수문자',
-            '는 사용할 수 없습니다.',
-          ]}
-          onClose={() => setAlertAddUser(!alertAddUser)}
-        />
-      )}
-      {alertSelectTime && (
-        <Alert
-          messages={['', `가능한${BLANK}`, '시간대', '를 표시하세요']}
-          onClose={() => setAlertSelectTime(!alertSelectTime)}
-        />
+      {alert && (
+        <Alert messages={alertMessage} onClose={() => setAlert(false)} />
       )}
 
       {userToggle ? (
@@ -111,13 +111,18 @@ const LiteHeader: React.FC<LiteHeaderProps> = ({
           <CopyUrlLite onClick={handleCopy} />
           <S.UserContainer>
             <S.AddUserContainer onClick={handleToggle}>
-              <S.AddUserText>인원 추가</S.AddUserText>
-              <AddIcon />
+              <S.AddUserText>
+                {selectedUser ? '일정 수정' : '인원 추가'}
+              </S.AddUserText>
+
+              {selectedUser ? <LiteEditSchedule /> : <LiteUserAddIcon />}
             </S.AddUserContainer>
             <S.PickUserContainer
               onClick={() => setToggleUserBox(!toggleUserBox)}
             >
-              <S.PickUserText>전체 보기</S.PickUserText>
+              <S.PickUserText>
+                {selectedUser == '' ? '전체 보기' : selectedUser}
+              </S.PickUserText>
               {toggleUserBox ? (
                 <>
                   <UserTable />
