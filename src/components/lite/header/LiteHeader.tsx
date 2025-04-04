@@ -2,7 +2,7 @@ import * as S from './LiteHeader.styled';
 import { CopyUrlLite } from '@icons/CopyUrl';
 import { LiteUserAddIcon } from '@icons/AddIcon';
 import { ArrowDownPickUser, ArrowUpPickUser } from '@icons/Arrows';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { LiteEditSchedule, InputUserName } from '@icons/Input';
 import Alert from '@components/alert/Alert';
 import { useNavigate } from 'react-router-dom';
@@ -79,6 +79,12 @@ const LiteHeader: React.FC<LiteHeaderProps> = ({
   useEffect(() => {
     setUserName(selectedUser);
   }, [selectedUser]);
+
+  const handleCloseAlert = useCallback(() => {
+    if (alert) {
+      setAlert(false);
+    }
+  }, [alert]);
 
   return (
     <S.LiteHeaderContainer>
