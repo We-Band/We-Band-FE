@@ -20,6 +20,7 @@ const colors = {
   },
   BlackAlpha: {
     700: 'rgba(0, 0, 0, 0.64)',
+    600: 'rgba(0, 0, 0, 0.48)',
   },
   WBOrange: {
     wbo50: '#ffedec',

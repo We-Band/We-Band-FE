@@ -4,12 +4,15 @@ import LiteHeader from './header/LiteHeader';
 import LiteCalendar from '@components/calendar/LiteCalendar';
 import * as S from './LiteHome.styled';
 import { useState } from 'react';
+import AlertUrlCopy from './alertUrlCopy/AlertUrlCopy';
 
 interface LiteContextType {
   encodedSchedule: string;
   setEncodedSchedule: React.Dispatch<React.SetStateAction<string>>;
   selectedUser: string;
   setSelectedUser: React.Dispatch<React.SetStateAction<string>>;
+  alertCopyUrl: boolean;
+  setAlertCopyUrl: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const LiteContext = createContext<LiteContextType>({
@@ -17,6 +20,8 @@ export const LiteContext = createContext<LiteContextType>({
   setEncodedSchedule: () => {},
   selectedUser: '',
   setSelectedUser: () => {},
+  alertCopyUrl: false,
+  setAlertCopyUrl: () => {},
 });
 
 export const useLiteContext = () => {
@@ -30,6 +35,7 @@ export const useLiteContext = () => {
 const LiteProvider = ({ children }: { children: ReactNode }) => {
   const [encodedSchedule, setEncodedSchedule] = useState('');
   const [selectedUser, setSelectedUser] = useState('');
+  const [alertCopyUrl, setAlertCopyUrl] = useState(false);
 
   return (
     <LiteContext.Provider
@@ -38,6 +44,8 @@ const LiteProvider = ({ children }: { children: ReactNode }) => {
         setEncodedSchedule,
         selectedUser,
         setSelectedUser,
+        alertCopyUrl,
+        setAlertCopyUrl,
       }}
     >
       {children}
@@ -47,10 +55,12 @@ const LiteProvider = ({ children }: { children: ReactNode }) => {
 
 const LiteHome = () => {
   const [userToggle, setUserToggle] = useState(false);
+  const { alertCopyUrl } = useLiteContext();
 
   return (
     <S.LiteHomeContainer>
       <LiteProvider>
+        {alertCopyUrl && <AlertUrlCopy />}
         <LiteHeader userToggle={userToggle} setUserToggle={setUserToggle} />
         <LiteCalendar userToggle={userToggle} />
       </LiteProvider>
