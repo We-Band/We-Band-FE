@@ -1,5 +1,5 @@
 {
-  "include": ["src"],
+  "include": ["src", "theme.d.ts"],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
@@ -10,7 +10,9 @@
       "@hooks/*": ["src/hooks/*"],
       "@api/*": ["src/api/*"],
       "@layout/*": ["src/layout/*"],
-      "@styles/*": ["src/styles/*"]
+      "@styles/*": ["src/styles/*"],
+      "@constants/*": ["src/constants/*"],
+      "@icons/*": ["src/icons/*"]
     },
     "target": "ESNext",
     "useDefineForClassFields": true,

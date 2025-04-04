@@ -1,11 +1,12 @@
 import { Outlet } from 'react-router';
 import * as S from './MainLayout.styled';
+import Logo from '@assets/logo/we-band-logo.svg?react';
 
 const MainLayout = () => {
   return (
     <S.MainLayoutContainer>
       <S.LogoContainer>
-        <S.Logo />
+        <Logo />
       </S.LogoContainer>
       <Outlet />
     </S.MainLayoutContainer>
