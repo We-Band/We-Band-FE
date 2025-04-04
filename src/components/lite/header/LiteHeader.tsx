@@ -7,7 +7,7 @@ import { LiteEditSchedule, InputUserName } from '@icons/Input';
 import Alert from '@components/alert/Alert';
 import { useNavigate } from 'react-router-dom';
 import { useLiteContext } from '../LiteHome';
-import UserTable from '../userTable/userTable';
+import UserTable from '../userTable/UserTable';
 import { cannotUseSpecialChar, setSchedule, urlCopied } from '@constants/alert';
 
 interface LiteHeaderProps {
