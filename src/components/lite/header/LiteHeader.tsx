@@ -59,8 +59,6 @@ const LiteHeader: React.FC<LiteHeaderProps> = ({
       new RegExp(`/${encodedUserName}-[^/]+`),
       '',
     );
-    console.log('currentPath', currentPath);
-    console.log('updatedPath', updatedPath);
 
     // 새로운 경로 생성 및 이동
     navigate(`${updatedPath}/${userName}-${encodedSchedule}`);

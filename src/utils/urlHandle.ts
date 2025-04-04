@@ -53,7 +53,6 @@ const charset =
 export const encode = (binaryStr: string): string => {
   let bigIntValue = BigInt('0b' + binaryStr);
   let encoded = '';
-  console.log(charset.length);
 
   const base = BigInt(charset.length);
 

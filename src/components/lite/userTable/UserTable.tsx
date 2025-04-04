@@ -7,13 +7,20 @@ const UserTable = () => {
   const userData = parsePathToUserData(path);
   const { selectedUser, setSelectedUser } = useLiteContext();
 
-  console.log(selectedUser);
-
   return (
     <S.UserTableContainer>
-      <S.UserButton onClick={() => setSelectedUser('')}>전체보기</S.UserButton>
+      <S.UserButton
+        $selected={!selectedUser}
+        onClick={() => setSelectedUser('')}
+      >
+        전체보기
+      </S.UserButton>
       {userData.map(({ name }, idx) => (
-        <S.UserButton key={idx} onClick={() => setSelectedUser(name)}>
+        <S.UserButton
+          $selected={selectedUser === name}
+          key={idx}
+          onClick={() => setSelectedUser(name)}
+        >
           {name}
         </S.UserButton>
       ))}

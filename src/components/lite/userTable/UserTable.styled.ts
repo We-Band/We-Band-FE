@@ -1,3 +1,4 @@
+import theme from '@styles/theme/theme';
 import styled from 'styled-components';
 
 export const UserTableContainer = styled.div`
@@ -20,7 +21,7 @@ export const UserTableContainer = styled.div`
   box-shadow: 0px 0px 1px 0px rgba(87, 85, 85, 0.25);
 `;
 
-export const UserButton = styled.div`
+export const UserButton = styled.div<{ $selected: boolean }>`
   display: flex;
   height: 44px;
   width: 100%;
@@ -31,5 +32,10 @@ export const UserButton = styled.div`
   gap: 10px;
 
   border-radius: 8px;
-  background: ${({ theme }) => theme.colors.Gray.gray200};
+  background: ${({ theme, $selected }) =>
+    $selected ? theme.colors.WBOrange.wbo200 : theme.colors.Gray.gray200};
+
+  border: 1px solid
+    ${({ theme, $selected }) =>
+      $selected ? theme.colors.WBOrange.wbo500 : 'transparent'};
 `;
