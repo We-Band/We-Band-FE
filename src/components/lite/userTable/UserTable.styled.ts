@@ -22,6 +22,8 @@ export const UserTableContainer = styled.div`
 `;
 
 export const UserButton = styled.div<{ $selected: boolean }>`
+  ${({ theme }) => theme.fontStyles.B03}
+
   display: flex;
   height: 44px;
   width: 100%;
