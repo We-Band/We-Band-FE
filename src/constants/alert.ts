@@ -4,7 +4,9 @@ export const CANNOTUSESPECIALCHAR = [
   '',
   `이름에${BLANK}`,
   '특수문자',
-  '는 사용할 수 없습니다.',
+  `,${BLANK}`,
+  `공백`,
+  '은 사용할 수 없습니다.',
 ];
 
 export const URLCOPIED = ['URL', '이 복사되었어요. 일정을 공유해 보세요.'];

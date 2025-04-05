@@ -5,7 +5,6 @@ import { LiteTrash } from '@icons/Trash';
 import { ArrowDownPickUser, ArrowUpPickUser } from '@icons/Arrows';
 import { useEffect, useState } from 'react';
 import { LiteEditSchedule, InputUserName } from '@icons/Input';
-import Alert from '@components/alert/Alert';
 
 import { useNavigate } from 'react-router-dom';
 import { useLiteContext } from '@components/lite/LiteHome';
@@ -48,7 +47,7 @@ const LiteHeader: React.FC<LiteHeaderProps> = ({
   };
 
   const handleAddUser = () => {
-    const reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
+    const reg = /[\s\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
     const safeUserName = userName.replace(reg, '');
 
     if (userName !== safeUserName) {
