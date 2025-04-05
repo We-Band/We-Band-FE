@@ -1,10 +1,12 @@
 import * as S from './LiteHeader.styled';
 import { CopyUrlLite } from '@icons/CopyUrl';
 import { LiteUserAddIcon } from '@icons/AddIcon';
+import { LiteTrash } from '@icons/Trash';
 import { ArrowDownPickUser, ArrowUpPickUser } from '@icons/Arrows';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { LiteEditSchedule, InputUserName } from '@icons/Input';
 import Alert from '@components/alert/Alert';
+
 import { useNavigate } from 'react-router-dom';
 import { useLiteContext } from '@components/lite/LiteHome';
 import UserTable from '../userTable/UserTable';
@@ -65,6 +67,22 @@ const LiteHeader: React.FC<LiteHeaderProps> = ({
     navigate(`${updatedPath}/${userName}-${encodedSchedule}`);
   };
 
+  const handleDeleteUser = () => {
+    // 현재 URL 가져오기
+    const currentPath = window.location.pathname;
+    const encodedUserName = encodeURIComponent(userName); // userName을 URL 인코딩
+
+    // 기존 'encodedUserName-encodedSchedule' 패턴을 찾아 제거
+    const updatedPath = currentPath.replace(
+      new RegExp(`/${encodedUserName}-[^/]+`),
+      '',
+    );
+
+    localStorage.setItem('alertCopyUrl', JSON.stringify(true));
+    // 새로운 경로 생성 및 이동
+    navigate(`${updatedPath}`);
+  };
+
   const handleToggle = () => {
     setUserToggle((prev) => !prev);
   };
@@ -79,12 +97,6 @@ const LiteHeader: React.FC<LiteHeaderProps> = ({
   useEffect(() => {
     setUserName(selectedUser);
   }, [selectedUser]);
-
-  const handleCloseAlert = useCallback(() => {
-    if (alert) {
-      setAlert(false);
-    }
-  }, [alert]);
 
   return (
     <S.LiteHeaderContainer>
@@ -113,7 +125,11 @@ const LiteHeader: React.FC<LiteHeaderProps> = ({
         </>
       ) : (
         <>
-          <CopyUrlLite onClick={handleCopy} />
+          {selectedUser ? (
+            <LiteTrash onClick={handleDeleteUser} />
+          ) : (
+            <CopyUrlLite onClick={handleCopy} />
+          )}
           <S.UserContainer>
             <S.AddUserContainer onClick={handleToggle}>
               <S.AddUserText>
