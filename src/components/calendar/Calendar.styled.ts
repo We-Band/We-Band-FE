@@ -88,7 +88,7 @@ export const CalendarSchedule = styled.div<{
   $selected?: boolean;
 }>`
   width: 44px;
-  height: 21px;
+  height: 19.5px;
 
   background-color: ${({ theme, $num, $total, $selected }) =>
     $selected
