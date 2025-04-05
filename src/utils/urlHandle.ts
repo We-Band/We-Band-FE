@@ -77,10 +77,22 @@ const getCommonChineseCharacters = () => {
   return chinese;
 };
 
+const getJapaneseKana = () => {
+  let kana = '';
+  for (let i = 0x3040; i <= 0x309f; i++) {
+    kana += String.fromCharCode(i); // 히라가나
+  }
+  for (let i = 0x30a0; i <= 0x30ff; i++) {
+    kana += String.fromCharCode(i); // 가타카나
+  }
+  return kana;
+};
+
 const charset =
   generateHangulCharset() +
   getAllEnglishLetters() +
-  getCommonChineseCharacters();
+  getCommonChineseCharacters() +
+  getJapaneseKana();
 
 export const encode = (binaryStr: string): string => {
   let bigIntValue = BigInt('0b' + binaryStr);

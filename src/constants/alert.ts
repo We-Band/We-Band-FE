@@ -9,4 +9,11 @@ export const CANNOTUSESPECIALCHAR = [
 
 export const URLCOPIED = ['URL', '이 복사되었어요. 일정을 공유해 보세요.'];
 
-export const SETSCHEDULE = ['', `가능한${BLANK}`, '시간대', '를 표시하세요'];
+export const SETSCHEDULE = [
+  '',
+  `가능한 시간대를${BLANK}`,
+  '시작',
+  `과${BLANK}`,
+  '끝',
+  '으로 표시하세요',
+];

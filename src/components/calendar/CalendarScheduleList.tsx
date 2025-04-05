@@ -17,18 +17,63 @@ const CalendarScheduleList: React.FC<CalendarScheduleProps> = ({
 }) => {
   const [scheduleString, setScheduleString] = useState(initialScheduleString);
   const { setEncodedSchedule } = useLiteContext();
+  const [startIndex, setStartIndex] = useState<number | null>(null);
+  const [currentIndex, setCurrentIndex] = useState<number | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   const toggleSchedule = (weekIdx: number, sectionIdx: number, pos: number) => {
     const index = weekIdx * 30 + sectionIdx * 2 + pos;
     if (index >= scheduleString.length) return;
 
-    const updatedChar = scheduleString[index] === '0' ? '1' : '0';
-    const updatedSchedule =
-      scheduleString.substring(0, index) +
-      updatedChar +
-      scheduleString.substring(index + 1);
+    // 첫 번째 터치: 시작 위치 저장
+    if (startIndex === null) {
+      setStartIndex(index);
 
-    setScheduleString(updatedSchedule);
+      return;
+    }
+
+    // 두 번째 터치: 범위 토글
+    const endIndex = index;
+    const [from, to] = [startIndex, endIndex].sort((a, b) => a - b);
+    let updated = scheduleString.split('');
+
+    for (let i = from; i <= to; i++) {
+      updated[i] = updated[i] === '0' ? '1' : '0';
+    }
+
+    setScheduleString(updated.join(''));
+    setStartIndex(null); // 초기화
+  };
+
+  const getIndex = (weekIdx: number, sectionIdx: number, pos: number) =>
+    weekIdx * 30 + sectionIdx * 2 + pos;
+
+  const handleTouch = (weekIdx: number, sectionIdx: number, pos: number) => {
+    const index = getIndex(weekIdx, sectionIdx, pos);
+
+    if (startIndex === null) {
+      setStartIndex(index); // 첫 클릭
+      setCurrentIndex(index); // 현재 위치도 설정
+    } else {
+      const [from, to] = [startIndex, index].sort((a, b) => a - b);
+      const updated = scheduleString
+        .split('')
+        .map((char, i) =>
+          i >= from && i <= to ? (char === '0' ? '1' : '0') : char,
+        )
+        .join('');
+
+      setScheduleString(updated);
+      setStartIndex(null);
+      setCurrentIndex(null);
+    }
+  };
+
+  const handleHover = (weekIdx: number, sectionIdx: number, pos: number) => {
+    if (startIndex !== null) {
+      const index = getIndex(weekIdx, sectionIdx, pos);
+      setCurrentIndex(index);
+    }
   };
 
   useEffect(() => {
@@ -56,21 +101,40 @@ const CalendarScheduleList: React.FC<CalendarScheduleProps> = ({
               const num1 = parseInt(daySchedule[sectionIdx * 2] || '0', 10);
               const num2 = parseInt(daySchedule[sectionIdx * 2 + 1] || '0', 10);
 
+              const index1 = getIndex(weekIdx, sectionIdx, 0);
+              const index2 = getIndex(weekIdx, sectionIdx, 1);
+
+              const isSelected1 =
+                startIndex !== null &&
+                currentIndex !== null &&
+                Math.min(startIndex, currentIndex) <= index1 &&
+                index1 <= Math.max(startIndex, currentIndex);
+
+              const isSelected2 =
+                startIndex !== null &&
+                currentIndex !== null &&
+                Math.min(startIndex, currentIndex) <= index2 &&
+                index2 <= Math.max(startIndex, currentIndex);
+
               return (
                 <S.CalendarScheduleSection key={sectionIdx}>
                   <S.CalendarSchedule
                     $num={num1}
                     $total={totalUser}
-                    onClick={() =>
-                      edit && toggleSchedule(weekIdx, sectionIdx, 0)
+                    onMouseEnter={() =>
+                      edit && handleHover(weekIdx, sectionIdx, 0)
                     }
+                    onClick={() => edit && handleTouch(weekIdx, sectionIdx, 0)}
+                    $selected={isSelected1}
                   />
                   <S.CalendarSchedule
                     $num={num2}
                     $total={totalUser}
-                    onClick={() =>
-                      edit && toggleSchedule(weekIdx, sectionIdx, 1)
+                    onClick={() => edit && handleTouch(weekIdx, sectionIdx, 1)}
+                    onMouseEnter={() =>
+                      edit && handleHover(weekIdx, sectionIdx, 1)
                     }
+                    $selected={isSelected2}
                   />
                 </S.CalendarScheduleSection>
               );
