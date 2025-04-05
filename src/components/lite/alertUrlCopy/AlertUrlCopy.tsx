@@ -1,9 +1,9 @@
 import { AlertCopyUrlLite } from '@icons/CopyUrl';
 import * as S from './AlertUrlCopy.styled';
-import { useState } from 'react';
-import Alert from '@components/alert/Alert';
-import { urlCopied } from '@constants/alert';
+import { useEffect, useState } from 'react';
+import { URLCOPIED } from '@constants/alert';
 import { useNavigate } from 'react-router-dom';
+import useAlertStore from '@store/alert';
 
 interface AlertUrlCopyProps {
   url: string;
@@ -15,27 +15,28 @@ const AlertUrlCopy = ({ url }: AlertUrlCopyProps) => {
   const handleClick = () => {
     navigate(url);
   };
-  const [alert, setAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState(['']);
+
+  const setAlert = useAlertStore((state) => state.setAlert);
+  const setAlertMessage = useAlertStore((state) => state.setAlertMessage);
 
   const handleCopy = () => {
     navigator.clipboard
       .writeText(url)
       .then(() => {
         setAlert(true);
-        setAlertMessage(urlCopied);
+        setAlertMessage(URLCOPIED);
       })
       .catch((err) => {
         console.error('Error copying text: ', err);
       });
   };
 
+  useEffect(() => {
+    handleCopy();
+  }, []);
+
   return (
     <S.AlertCopyUrlBackgroud>
-      {alert && (
-        <Alert messages={alertMessage} onClose={() => setAlert(false)} />
-      )}
-
       <S.AlertCopyUrlContainer>
         <S.AlertCopyUrlTitle>일정 저장 완료!</S.AlertCopyUrlTitle>
         <S.UrlContainer onClick={handleCopy}>

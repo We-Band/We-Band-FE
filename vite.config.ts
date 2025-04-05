@@ -23,7 +23,7 @@ export default defineConfig({
       '@styles': path.resolve(__dirname, 'src/styles'),
       '@constants': path.resolve(__dirname, 'src/constants'),
       '@icons': path.resolve(__dirname, 'src/icons'),
-      '@context': path.resolve(__dirname, 'src/context'),
+      '@store': path.resolve(__dirname, 'src/store'),
     },
   },
   plugins: [react(), svgr()],

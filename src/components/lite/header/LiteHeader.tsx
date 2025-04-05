@@ -10,8 +10,9 @@ import Alert from '@components/alert/Alert';
 import { useNavigate } from 'react-router-dom';
 import { useLiteContext } from '@components/lite/LiteHome';
 import UserTable from '../userTable/UserTable';
-import { cannotUseSpecialChar, setSchedule, urlCopied } from '@constants/alert';
+import { CANNOTUSESPECIALCHAR, SETSCHEDULE, URLCOPIED } from '@constants/alert';
 import AlertUrlCopy from '../alertUrlCopy/AlertUrlCopy';
+import useAlertStore from '@store/alert';
 
 interface LiteHeaderProps {
   userToggle: boolean;
@@ -30,15 +31,16 @@ const LiteHeader: React.FC<LiteHeaderProps> = ({
   const { encodedSchedule, selectedUser } = useLiteContext();
   const [toggleUserBox, setToggleUserBox] = useState(false);
   const [modalCopyUrl, setAlertCopyUrl] = useState(false);
-  const [alert, setAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState(['']);
+
+  const setAlert = useAlertStore((state) => state.setAlert);
+  const setAlertMessage = useAlertStore((state) => state.setAlertMessage);
 
   const handleCopy = () => {
     navigator.clipboard
       .writeText(currentUrl)
       .then(() => {
         setAlert(true);
-        setAlertMessage(urlCopied);
+        setAlertMessage(URLCOPIED);
       })
       .catch((err) => {
         console.error('Error copying text: ', err);
@@ -51,7 +53,7 @@ const LiteHeader: React.FC<LiteHeaderProps> = ({
 
     if (userName !== safeUserName) {
       setAlert(true);
-      setAlertMessage(cannotUseSpecialChar);
+      setAlertMessage(CANNOTUSESPECIALCHAR);
       return;
     }
 
@@ -65,7 +67,11 @@ const LiteHeader: React.FC<LiteHeaderProps> = ({
       '',
     );
 
-    setUrl(`${updatedPath}/${userName}-${encodedSchedule}`);
+    const resultPath = decodeURI(
+      `${updatedPath}/${userName}-${encodedSchedule}`,
+    );
+
+    setUrl(resultPath);
     setAlertCopyUrl(true);
     // 새로운 경로 생성 및 이동
     // navigate();
@@ -93,7 +99,7 @@ const LiteHeader: React.FC<LiteHeaderProps> = ({
   useEffect(() => {
     if (userToggle) {
       setAlert(true);
-      setAlertMessage(setSchedule);
+      setAlertMessage(SETSCHEDULE);
     }
   }, [userToggle]);
 
@@ -104,10 +110,6 @@ const LiteHeader: React.FC<LiteHeaderProps> = ({
   return (
     <S.LiteHeaderContainer>
       {modalCopyUrl && <AlertUrlCopy url={url} />}
-      {alert && (
-        <Alert messages={alertMessage} onClose={() => setAlert(false)} />
-      )}
-
       {userToggle ? (
         <>
           <S.UserNameInputContainer>
