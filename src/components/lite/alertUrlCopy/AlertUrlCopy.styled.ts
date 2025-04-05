@@ -49,7 +49,7 @@ export const UrlText = styled.p`
   ${({ theme }) => theme.fontStyles.S02_Bold};
 
   white-space: nowrap;
-  overflow-x: auto;
+  overflow-x: hidden;
 `;
 
 export const UrlInstructionContainer = styled.div`
