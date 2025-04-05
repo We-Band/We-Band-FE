@@ -97,10 +97,12 @@ export const MonthDropBox = styled.div`
 `;
 
 interface MonthDropItemProps {
-  isCurrent?: boolean;
+  iscurrent: boolean;
 }
 
-export const MonthDropItem = styled.div<MonthDropItemProps>`
+export const MonthDropItem = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== 'iscurrent',
+})<MonthDropItemProps>`
   ${({ theme }) => theme.fontStyles.B03};
 
   display: flex;
@@ -115,11 +117,11 @@ export const MonthDropItem = styled.div<MonthDropItemProps>`
   margin-right: 4px;
   border-radius: 8px;
 
-  background-color: ${({ isCurrent, theme }) =>
-    isCurrent ? theme.colors.WBOrange.wbo200 : theme.colors.Gray.gray200};
+  background-color: ${({ iscurrent, theme }) =>
+    iscurrent ? theme.colors.WBOrange.wbo200 : theme.colors.Gray.gray200};
   border: 1px solid
-    ${({ isCurrent, theme }) =>
-      isCurrent ? theme.colors.WBOrange.wbo500 : 'none'};
+    ${({ iscurrent, theme }) =>
+      iscurrent ? theme.colors.WBOrange.wbo500 : 'none'};
 `;
 
 export const DateInput = styled.input`
