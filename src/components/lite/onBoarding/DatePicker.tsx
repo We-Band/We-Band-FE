@@ -110,6 +110,11 @@ const DatePicker: React.FC = () => {
             type="number"
             value={date.toString()}
             onChange={(e) => handleDateChange(e)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleClick();
+              }
+            }}
           />
           <S.DateText>일</S.DateText>
         </S.DatePicker>
