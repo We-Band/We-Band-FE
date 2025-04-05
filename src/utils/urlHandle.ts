@@ -47,8 +47,40 @@ export const sumBinaryStrings = (
   return result;
 };
 
+const generateHangulCharset = () => {
+  const hangulStart = 0xac00;
+  const hangulEnd = 0xd7a3;
+  let hangul = '';
+
+  for (let i = hangulStart; i <= hangulEnd; i++) {
+    hangul += String.fromCharCode(i);
+  }
+
+  return hangul;
+};
+
+const getAllEnglishLetters = () => {
+  const upper = Array.from({ length: 26 }, (_, i) =>
+    String.fromCharCode(65 + i),
+  ); // A-Z
+  const lower = Array.from({ length: 26 }, (_, i) =>
+    String.fromCharCode(97 + i),
+  ); // a-z
+  return upper.concat(lower).join('');
+};
+
+const getCommonChineseCharacters = () => {
+  let chinese = '';
+  for (let i = 0x4e00; i <= 0x9fff; i++) {
+    chinese += String.fromCharCode(i);
+  }
+  return chinese;
+};
+
 const charset =
-  '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  generateHangulCharset() +
+  getAllEnglishLetters() +
+  getCommonChineseCharacters();
 
 export const encode = (binaryStr: string): string => {
   let bigIntValue = BigInt('0b' + binaryStr);

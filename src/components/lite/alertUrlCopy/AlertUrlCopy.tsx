@@ -5,7 +5,7 @@ import Alert from '@components/alert/Alert';
 import { urlCopied } from '@constants/alert';
 
 const AlertUrlCopy = () => {
-  const url = window.location.href;
+  const url = decodeURI(window.location.href);
   const handleClick = () => {
     localStorage.setItem('alertCopyUrl', JSON.stringify(false));
     window.location.reload();
@@ -14,9 +14,8 @@ const AlertUrlCopy = () => {
   const [alertMessage, setAlertMessage] = useState(['']);
 
   const handleCopy = () => {
-    const currentUrl = window.location.href;
     navigator.clipboard
-      .writeText(currentUrl)
+      .writeText(url)
       .then(() => {
         setAlert(true);
         setAlertMessage(urlCopied);
