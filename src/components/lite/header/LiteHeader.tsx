@@ -28,7 +28,7 @@ const LiteHeader: React.FC<LiteHeaderProps> = ({
   const [alertMessage, setAlertMessage] = useState(['']);
 
   const handleCopy = () => {
-    const currentUrl = window.location.href;
+    const currentUrl = decodeURI(window.location.href);
     navigator.clipboard
       .writeText(currentUrl)
       .then(() => {
