@@ -3,12 +3,17 @@ import * as S from './AlertUrlCopy.styled';
 import { useState } from 'react';
 import Alert from '@components/alert/Alert';
 import { urlCopied } from '@constants/alert';
+import { useNavigate } from 'react-router-dom';
 
-const AlertUrlCopy = () => {
-  const url = decodeURI(window.location.href);
+interface AlertUrlCopyProps {
+  url: string;
+}
+
+const AlertUrlCopy = ({ url }: AlertUrlCopyProps) => {
+  const navigate = useNavigate();
+
   const handleClick = () => {
-    localStorage.setItem('alertCopyUrl', JSON.stringify(false));
-    window.location.reload();
+    navigate(url);
   };
   const [alert, setAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState(['']);

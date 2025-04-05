@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLiteContext } from '@components/lite/LiteHome';
 import UserTable from '../userTable/UserTable';
 import { cannotUseSpecialChar, setSchedule, urlCopied } from '@constants/alert';
+import AlertUrlCopy from '../alertUrlCopy/AlertUrlCopy';
 
 interface LiteHeaderProps {
   userToggle: boolean;
@@ -21,16 +22,18 @@ const LiteHeader: React.FC<LiteHeaderProps> = ({
   userToggle,
   setUserToggle,
 }) => {
+  const currentUrl = decodeURI(window.location.href);
+  const [url, setUrl] = useState(currentUrl);
+
   const navigate = useNavigate();
   const [userName, setUserName] = useState('');
   const { encodedSchedule, selectedUser } = useLiteContext();
   const [toggleUserBox, setToggleUserBox] = useState(false);
-
+  const [modalCopyUrl, setAlertCopyUrl] = useState(false);
   const [alert, setAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState(['']);
 
   const handleCopy = () => {
-    const currentUrl = decodeURI(window.location.href);
     navigator.clipboard
       .writeText(currentUrl)
       .then(() => {
@@ -62,9 +65,10 @@ const LiteHeader: React.FC<LiteHeaderProps> = ({
       '',
     );
 
-    localStorage.setItem('alertCopyUrl', JSON.stringify(true));
+    setUrl(`${updatedPath}/${userName}-${encodedSchedule}`);
+    setAlertCopyUrl(true);
     // 새로운 경로 생성 및 이동
-    navigate(`${updatedPath}/${userName}-${encodedSchedule}`);
+    // navigate();
   };
 
   const handleDeleteUser = () => {
@@ -78,7 +82,6 @@ const LiteHeader: React.FC<LiteHeaderProps> = ({
       '',
     );
 
-    localStorage.setItem('alertCopyUrl', JSON.stringify(true));
     // 새로운 경로 생성 및 이동
     navigate(`${updatedPath}`);
   };
@@ -100,6 +103,7 @@ const LiteHeader: React.FC<LiteHeaderProps> = ({
 
   return (
     <S.LiteHeaderContainer>
+      {modalCopyUrl && <AlertUrlCopy url={url} />}
       {alert && (
         <Alert messages={alertMessage} onClose={() => setAlert(false)} />
       )}
