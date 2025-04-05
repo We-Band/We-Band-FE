@@ -1,14 +1,18 @@
 import * as S from './LiteHeader.styled';
 import { CopyUrlLite } from '@icons/CopyUrl';
 import { LiteUserAddIcon } from '@icons/AddIcon';
+import { LiteTrash } from '@icons/Trash';
 import { ArrowDownPickUser, ArrowUpPickUser } from '@icons/Arrows';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { LiteEditSchedule, InputUserName } from '@icons/Input';
 import Alert from '@components/alert/Alert';
+
 import { useNavigate } from 'react-router-dom';
 import { useLiteContext } from '@components/lite/LiteHome';
 import UserTable from '../userTable/UserTable';
-import { cannotUseSpecialChar, setSchedule, urlCopied } from '@constants/alert';
+import { CANNOTUSESPECIALCHAR, SETSCHEDULE, URLCOPIED } from '@constants/alert';
+import AlertUrlCopy from '../alertUrlCopy/AlertUrlCopy';
+import useAlertStore from '@store/alert';
 
 interface LiteHeaderProps {
   userToggle: boolean;
@@ -19,21 +23,24 @@ const LiteHeader: React.FC<LiteHeaderProps> = ({
   userToggle,
   setUserToggle,
 }) => {
+  const currentUrl = decodeURI(window.location.href);
+  const [url, setUrl] = useState(currentUrl);
+
   const navigate = useNavigate();
   const [userName, setUserName] = useState('');
   const { encodedSchedule, selectedUser } = useLiteContext();
   const [toggleUserBox, setToggleUserBox] = useState(false);
+  const [modalCopyUrl, setAlertCopyUrl] = useState(false);
 
-  const [alert, setAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState(['']);
+  const setAlert = useAlertStore((state) => state.setAlert);
+  const setAlertMessage = useAlertStore((state) => state.setAlertMessage);
 
   const handleCopy = () => {
-    const currentUrl = window.location.href;
     navigator.clipboard
       .writeText(currentUrl)
       .then(() => {
         setAlert(true);
-        setAlertMessage(urlCopied);
+        setAlertMessage(URLCOPIED);
       })
       .catch((err) => {
         console.error('Error copying text: ', err);
@@ -46,7 +53,7 @@ const LiteHeader: React.FC<LiteHeaderProps> = ({
 
     if (userName !== safeUserName) {
       setAlert(true);
-      setAlertMessage(cannotUseSpecialChar);
+      setAlertMessage(CANNOTUSESPECIALCHAR);
       return;
     }
 
@@ -60,9 +67,29 @@ const LiteHeader: React.FC<LiteHeaderProps> = ({
       '',
     );
 
-    localStorage.setItem('alertCopyUrl', JSON.stringify(true));
+    const resultPath = decodeURI(
+      `${updatedPath}/${userName}-${encodedSchedule}`,
+    );
+
+    setUrl(resultPath);
+    setAlertCopyUrl(true);
     // 새로운 경로 생성 및 이동
-    navigate(`${updatedPath}/${userName}-${encodedSchedule}`);
+    // navigate();
+  };
+
+  const handleDeleteUser = () => {
+    // 현재 URL 가져오기
+    const currentPath = window.location.pathname;
+    const encodedUserName = encodeURIComponent(userName); // userName을 URL 인코딩
+
+    // 기존 'encodedUserName-encodedSchedule' 패턴을 찾아 제거
+    const updatedPath = currentPath.replace(
+      new RegExp(`/${encodedUserName}-[^/]+`),
+      '',
+    );
+
+    // 새로운 경로 생성 및 이동
+    navigate(`${updatedPath}`);
   };
 
   const handleToggle = () => {
@@ -72,7 +99,7 @@ const LiteHeader: React.FC<LiteHeaderProps> = ({
   useEffect(() => {
     if (userToggle) {
       setAlert(true);
-      setAlertMessage(setSchedule);
+      setAlertMessage(SETSCHEDULE);
     }
   }, [userToggle]);
 
@@ -80,18 +107,9 @@ const LiteHeader: React.FC<LiteHeaderProps> = ({
     setUserName(selectedUser);
   }, [selectedUser]);
 
-  const handleCloseAlert = useCallback(() => {
-    if (alert) {
-      setAlert(false);
-    }
-  }, [alert]);
-
   return (
     <S.LiteHeaderContainer>
-      {alert && (
-        <Alert messages={alertMessage} onClose={() => setAlert(false)} />
-      )}
-
+      {modalCopyUrl && <AlertUrlCopy url={url} />}
       {userToggle ? (
         <>
           <S.UserNameInputContainer>
@@ -113,7 +131,11 @@ const LiteHeader: React.FC<LiteHeaderProps> = ({
         </>
       ) : (
         <>
-          <CopyUrlLite onClick={handleCopy} />
+          {selectedUser ? (
+            <LiteTrash onClick={handleDeleteUser} />
+          ) : (
+            <CopyUrlLite onClick={handleCopy} />
+          )}
           <S.UserContainer>
             <S.AddUserContainer onClick={handleToggle}>
               <S.AddUserText>

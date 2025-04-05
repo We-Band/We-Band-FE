@@ -27,7 +27,7 @@ const DatePicker: React.FC = () => {
   const [monthNum, setMonthNum] = useState(MonthToNum(month));
   const [maxDay, setMaxDay] = useState(getMaxDaysInMonth(year, monthNum));
   const [toggle, setToggle] = useState(true);
-  const isInitialMount = useRef(true);
+  const monthDropBoxRef = useRef<HTMLDivElement>(null);
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(e.target.value);
@@ -60,6 +60,21 @@ const DatePicker: React.FC = () => {
     navigate(encodeDate(year, MonthToNum(month) + 1, date));
   };
 
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        dropBoxToggle &&
+        monthDropBoxRef.current &&
+        !monthDropBoxRef.current.contains(e.target as Node)
+      ) {
+        setDropBoxToggle(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [dropBoxToggle]);
+
   return (
     <>
       <S.DatePickerContainer>
@@ -71,11 +86,11 @@ const DatePicker: React.FC = () => {
         <S.MonthPicker onClick={() => setDropBoxToggle(!dropBoxToggle)}>
           <S.MonthText>{month}</S.MonthText>
           {dropBoxToggle && (
-            <S.MonthDropBox>
+            <S.MonthDropBox ref={monthDropBoxRef}>
               {MONTHNAMES.map((monthName) => (
                 <S.MonthDropItem
                   key={monthName}
-                  isCurrent={monthName === month}
+                  iscurrent={monthName === month}
                   onClick={() => {
                     setMonth(monthName);
                     setDropBoxToggle(false);
@@ -95,6 +110,11 @@ const DatePicker: React.FC = () => {
             type="number"
             value={date.toString()}
             onChange={(e) => handleDateChange(e)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleClick();
+              }
+            }}
           />
           <S.DateText>일</S.DateText>
         </S.DatePicker>

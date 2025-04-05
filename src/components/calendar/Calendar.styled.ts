@@ -82,10 +82,16 @@ export const CalendarScheduleSection = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.colors.Gray.gray100};
 `;
 
-export const CalendarSchedule = styled.div<{ $num: number; $total: number }>`
+export const CalendarSchedule = styled.div<{
+  $num: number;
+  $total: number;
+  $selected?: boolean;
+}>`
   width: 44px;
   height: 21px;
 
-  background-color: ${({ theme, $num, $total }) =>
-    transparentize(1 - $num / $total, theme.colors.Alpha.alpha)};
+  background-color: ${({ theme, $num, $total, $selected }) =>
+    $selected
+      ? theme.colors.WBOrange.wbo200
+      : transparentize(1 - $num / $total, theme.colors.Alpha.alpha)};
 `;

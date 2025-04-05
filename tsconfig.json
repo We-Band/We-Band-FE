@@ -13,7 +13,7 @@
       "@styles/*": ["src/styles/*"],
       "@constants/*": ["src/constants/*"],
       "@icons/*": ["src/icons/*"],
-      "@context/*": ["src/context/*"]
+      "@store/*": ["src/store/*"]
     },
     "target": "ESNext",
     "useDefineForClassFields": true,
