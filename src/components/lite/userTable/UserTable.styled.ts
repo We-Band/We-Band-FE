@@ -28,6 +28,7 @@ export const UserButton = styled.div<{ $selected: boolean }>`
   width: 100%;
   justify-content: center;
   align-items: flex-start;
+  overflow: hidden;
 
   padding: 12px 36px;
   gap: 10px;
