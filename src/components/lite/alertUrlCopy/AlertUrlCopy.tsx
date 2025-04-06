@@ -21,7 +21,7 @@ const AlertUrlCopy = ({ url }: AlertUrlCopyProps) => {
 
   const handleCopy = () => {
     navigator.clipboard
-      .writeText(url)
+      .writeText('https://we-band.vercel.app' + url)
       .then(() => {
         setAlert(true);
         setAlertMessage(URLCOPIED);
@@ -40,7 +40,7 @@ const AlertUrlCopy = ({ url }: AlertUrlCopyProps) => {
       <S.AlertCopyUrlContainer>
         <S.AlertCopyUrlTitle>일정 저장 완료!</S.AlertCopyUrlTitle>
         <S.UrlContainer onClick={handleCopy}>
-          <S.UrlText>{url}</S.UrlText>
+          <S.UrlText>{'https://we-band.vercel.app/lite' + url}</S.UrlText>
           <AlertCopyUrlLite />
         </S.UrlContainer>
         <S.UrlInstructionContainer>
