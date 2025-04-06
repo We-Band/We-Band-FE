@@ -1,9 +1,8 @@
-import theme from '@styles/theme/theme';
 import styled from 'styled-components';
 
 export const UserTableContainer = styled.div`
   display: flex;
-  position: fixed;
+  position: absolute;
   flex-direction: column;
   width: 154px;
   max-height: 200px;
