@@ -11,7 +11,7 @@ interface AlertUrlCopyProps {
 
 const AlertUrlCopy = ({ url }: AlertUrlCopyProps) => {
   const navigate = useNavigate();
-  const domain = window.location.host;
+  const domain = window.location.origin;
 
   const handleClick = () => {
     navigate(url);
