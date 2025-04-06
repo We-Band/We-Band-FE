@@ -1,6 +1,6 @@
 import { AlertCopyUrlLite } from '@icons/CopyUrl';
 import * as S from './AlertUrlCopy.styled';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { URLCOPIED } from '@constants/alert';
 import { useNavigate } from 'react-router-dom';
 import useAlertStore from '@store/alert';
@@ -11,6 +11,7 @@ interface AlertUrlCopyProps {
 
 const AlertUrlCopy = ({ url }: AlertUrlCopyProps) => {
   const navigate = useNavigate();
+  const domain = window.location.host;
 
   const handleClick = () => {
     navigate(url);
@@ -21,7 +22,7 @@ const AlertUrlCopy = ({ url }: AlertUrlCopyProps) => {
 
   const handleCopy = () => {
     navigator.clipboard
-      .writeText('https://we-band.vercel.app' + url)
+      .writeText(domain + url)
       .then(() => {
         setAlert(true);
         setAlertMessage(URLCOPIED);
@@ -40,7 +41,7 @@ const AlertUrlCopy = ({ url }: AlertUrlCopyProps) => {
       <S.AlertCopyUrlContainer>
         <S.AlertCopyUrlTitle>일정 저장 완료!</S.AlertCopyUrlTitle>
         <S.UrlContainer onClick={handleCopy}>
-          <S.UrlText>{'https://we-band.vercel.app/lite' + url}</S.UrlText>
+          <S.UrlText>{domain + url}</S.UrlText>
           <AlertCopyUrlLite />
         </S.UrlContainer>
         <S.UrlInstructionContainer>
