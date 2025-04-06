@@ -13,7 +13,7 @@ interface LiteContextType {
 }
 
 export const LiteContext = createContext<LiteContextType>({
-  encodedSchedule: '',
+  encodedSchedule: '0',
   setEncodedSchedule: () => {},
   selectedUser: '',
   setSelectedUser: () => {},
