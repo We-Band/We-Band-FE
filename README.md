@@ -21,7 +21,7 @@
 <타입>/<이슈 번호>-<간단한 설명>
 
 - feat/1234-add-user-login
-- bugfix/5678-fix-login-error
+- fix/5678-fix-login-error
 - release/1.2.0
 ```
 
