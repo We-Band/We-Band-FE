@@ -15,6 +15,8 @@ const LiteCalendar = ({ userToggle }: { userToggle: boolean }) => {
   const { selectedUser } = useLiteContext();
   const [selectedUserSchedule, setSelectedUserSchedule] = useState('');
 
+  console.log('userData', userData);
+
   useEffect(() => {
     if (selectedUser === '') {
       setSelectedUserSchedule(NOSCHEDULE);

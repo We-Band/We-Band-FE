@@ -95,6 +95,7 @@ const charset =
   getJapaneseKana();
 
 export const encode = (binaryStr: string): string => {
+  if (!/[1]/.test(binaryStr)) return charset[0];
   let bigIntValue = BigInt('0b' + binaryStr);
   let encoded = '';
 
@@ -114,7 +115,10 @@ export const decode = (encodedStr: string): string => {
   let bigIntValue = BigInt(0);
 
   for (const char of encodedStr) {
-    bigIntValue = bigIntValue * base + BigInt(charset.indexOf(char));
+    const idx = charset.indexOf(char);
+    if (idx === -1)
+      throw new Error(`Invalid character '${char}' in encoded string`);
+    bigIntValue = bigIntValue * base + BigInt(idx);
   }
 
   return bigIntValue.toString(2).padStart(210, '0');

@@ -19,31 +19,6 @@ const CalendarScheduleList: React.FC<CalendarScheduleProps> = ({
   const { setEncodedSchedule } = useLiteContext();
   const [startIndex, setStartIndex] = useState<number | null>(null);
   const [currentIndex, setCurrentIndex] = useState<number | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
-
-  const toggleSchedule = (weekIdx: number, sectionIdx: number, pos: number) => {
-    const index = weekIdx * 30 + sectionIdx * 2 + pos;
-    if (index >= scheduleString.length) return;
-
-    // 첫 번째 터치: 시작 위치 저장
-    if (startIndex === null) {
-      setStartIndex(index);
-
-      return;
-    }
-
-    // 두 번째 터치: 범위 토글
-    const endIndex = index;
-    const [from, to] = [startIndex, endIndex].sort((a, b) => a - b);
-    let updated = scheduleString.split('');
-
-    for (let i = from; i <= to; i++) {
-      updated[i] = updated[i] === '0' ? '1' : '0';
-    }
-
-    setScheduleString(updated.join(''));
-    setStartIndex(null); // 초기화
-  };
 
   const getIndex = (weekIdx: number, sectionIdx: number, pos: number) =>
     weekIdx * 30 + sectionIdx * 2 + pos;
