@@ -1,6 +1,7 @@
 {
-  "include": ["src", "theme.d.ts"],
+  "include": ["src", "theme.d.ts", "env.d.ts"],
   "compilerOptions": {
+    "types": ["vite/client"],
     "baseUrl": ".",
     "paths": {
       "@components/*": ["src/components/*"],

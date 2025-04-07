@@ -1,9 +1,10 @@
 import { AlertCopyUrlLite } from '@icons/CopyUrl';
 import * as S from './AlertUrlCopy.styled';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { URLCOPIED } from '@constants/alert';
 import { useNavigate } from 'react-router-dom';
 import useAlertStore from '@store/alert';
+import { getShortUrl } from '@api/shortUrl';
 
 interface AlertUrlCopyProps {
   url: string;
@@ -12,6 +13,7 @@ interface AlertUrlCopyProps {
 const AlertUrlCopy = ({ url }: AlertUrlCopyProps) => {
   const navigate = useNavigate();
   const domain = window.location.origin;
+  const [shortUrl, setShortUrl] = useState('');
 
   const handleClick = () => {
     navigate(url);
@@ -21,14 +23,24 @@ const AlertUrlCopy = ({ url }: AlertUrlCopyProps) => {
   const setAlertMessage = useAlertStore((state) => state.setAlertMessage);
 
   const handleCopy = () => {
-    navigator.clipboard
-      .writeText(domain + url)
-      .then(() => {
-        setAlert(true);
-        setAlertMessage(URLCOPIED);
+    getShortUrl(domain + url)
+      .then((res) => {
+        const shortUrl = res.result; // 단축된 URL
+        setShortUrl(shortUrl);
+
+        navigator.clipboard
+          .writeText(shortUrl)
+          .then(() => {
+            setAlert(true);
+            setAlertMessage(URLCOPIED);
+            console.log('단축된 URL 복사 완료:', shortUrl);
+          })
+          .catch((err) => {
+            console.error('클립보드 복사 에러:', err);
+          });
       })
       .catch((err) => {
-        console.error('Error copying text: ', err);
+        console.error('URL 단축 에러:', err);
       });
   };
 
@@ -41,7 +53,7 @@ const AlertUrlCopy = ({ url }: AlertUrlCopyProps) => {
       <S.AlertCopyUrlContainer>
         <S.AlertCopyUrlTitle>일정 저장 완료!</S.AlertCopyUrlTitle>
         <S.UrlContainer onClick={handleCopy}>
-          <S.UrlText>{domain + url}</S.UrlText>
+          <S.UrlText>{shortUrl}</S.UrlText>
           <AlertCopyUrlLite />
         </S.UrlContainer>
         <S.UrlInstructionContainer>

@@ -12,6 +12,7 @@ import UserTable from '../userTable/UserTable';
 import { CANNOTUSESPECIALCHAR, SETSCHEDULE, URLCOPIED } from '@constants/alert';
 import AlertUrlCopy from '../alertUrlCopy/AlertUrlCopy';
 import useAlertStore from '@store/alert';
+import { getShortUrl } from '@api/shortUrl';
 
 interface LiteHeaderProps {
   userToggle: boolean;
@@ -35,14 +36,23 @@ const LiteHeader: React.FC<LiteHeaderProps> = ({
   const setAlertMessage = useAlertStore((state) => state.setAlertMessage);
 
   const handleCopy = () => {
-    navigator.clipboard
-      .writeText(currentUrl)
-      .then(() => {
-        setAlert(true);
-        setAlertMessage(URLCOPIED);
+    getShortUrl(currentUrl)
+      .then((res) => {
+        const shortUrl = res.result; // 단축된 URL
+
+        navigator.clipboard
+          .writeText(shortUrl)
+          .then(() => {
+            setAlert(true);
+            setAlertMessage(URLCOPIED);
+            console.log('단축된 URL 복사 완료:', shortUrl);
+          })
+          .catch((err) => {
+            console.error('클립보드 복사 에러:', err);
+          });
       })
       .catch((err) => {
-        console.error('Error copying text: ', err);
+        console.error('URL 단축 에러:', err);
       });
   };
 
