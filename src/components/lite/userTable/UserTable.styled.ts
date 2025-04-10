@@ -28,7 +28,6 @@ export const UserButton = styled.div<{ $selected: boolean }>`
   width: 100%;
   justify-content: center;
   align-items: flex-start;
-  overflow: hidden;
 
   padding: 12px 36px;
   gap: 10px;
@@ -40,4 +39,7 @@ export const UserButton = styled.div<{ $selected: boolean }>`
   border: 1px solid
     ${({ theme, $selected }) =>
       $selected ? theme.colors.WBOrange.wbo500 : 'transparent'};
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;
