@@ -6,13 +6,14 @@ import { parsePathToUserData, sumBinaryStrings } from '@utils/urlHandle';
 import CalendarScheduleList from './CalendarScheduleList';
 import { useLiteContext } from '@components/lite/LiteHome';
 import { useEffect, useState } from 'react';
+import { encode } from '@utils/urlHandle';
 
 const LiteCalendar = ({ userToggle }: { userToggle: boolean }) => {
   const path = window.location.pathname;
   const userData = parsePathToUserData(path);
   const totalUser = parsePathToUserData(path).length;
   const scheduleString = sumBinaryStrings(userData);
-  const { selectedUser } = useLiteContext();
+  const { selectedUser, setEncodedSchedule } = useLiteContext();
   const [selectedUserSchedule, setSelectedUserSchedule] = useState('');
 
   useEffect(() => {
@@ -26,6 +27,7 @@ const LiteCalendar = ({ userToggle }: { userToggle: boolean }) => {
     );
     const targetSchedule = userData[targetIndex]?.binaryData;
     setSelectedUserSchedule(targetSchedule);
+    setEncodedSchedule(encode(targetSchedule));
   }, [selectedUser]);
 
   return (

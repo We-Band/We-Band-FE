@@ -27,7 +27,8 @@ const LiteHeader: React.FC<LiteHeaderProps> = ({
 
   const navigate = useNavigate();
   const [userName, setUserName] = useState('');
-  const { encodedSchedule, selectedUser } = useLiteContext();
+  const { encodedSchedule, selectedUser, setEncodedSchedule } =
+    useLiteContext();
   const [toggleUserBox, setToggleUserBox] = useState(false);
   const [modalCopyUrl, setAlertCopyUrl] = useState(false);
 
@@ -100,6 +101,7 @@ const LiteHeader: React.FC<LiteHeaderProps> = ({
       setAlert(true);
       setAlertMessage(SETSCHEDULE);
     }
+    console.log();
   }, [userToggle]);
 
   useEffect(() => {
