@@ -53,6 +53,8 @@ const CalendarScheduleList: React.FC<CalendarScheduleProps> = ({
 
   useEffect(() => {
     setScheduleString(initialScheduleString);
+    setStartIndex(null);
+    setCurrentIndex(null);
   }, [edit]);
 
   useEffect(() => {

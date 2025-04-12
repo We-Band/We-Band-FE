@@ -15,6 +15,7 @@ const AlertUrlCopy = ({ url }: AlertUrlCopyProps) => {
 
   const handleClick = () => {
     navigate(url);
+    window.location.reload();
   };
 
   const setAlert = useAlertStore((state) => state.setAlert);
