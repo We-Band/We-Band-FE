@@ -1,5 +1,4 @@
 import { create } from 'zustand/react';
-import { shallow } from 'zustand/shallow';
 
 export interface AlertStore {
   alert: boolean;
@@ -15,5 +14,4 @@ const useAlertStore = create<AlertStore>((set) => ({
   setAlertMessage: (messages) => set({ alertMessage: messages }),
 }));
 
-export { shallow }; // 이걸 같이 export 해두면 깔끔함
 export default useAlertStore;

@@ -1,12 +1,12 @@
 import { BrowserRouter, Route, Routes } from 'react-router';
 import LiteLayout from '@layout/lite/LiteLayout';
 import MainLayout from '@layout/main/MainLayout';
-import Home from '@pages/Home';
-import Lite from '@pages/Lite';
+import Home from '@pages/Home/Home';
+import Lite from '@pages/Lite/Lite';
 import * as S from './App.styled';
 import Alert from '@components/alert/Alert';
 
-import useAlertStore, { AlertStore } from '@store/alert';
+import useAlertStore from '@store/alert';
 
 function App() {
   const alert = useAlertStore((state) => state.alert);
@@ -24,9 +24,7 @@ function App() {
             <Route path="lite/*" element={<Lite />} />
           </Route>
 
-          <Route element={<MainLayout />}>
-            <Route index element={<Home />} />
-          </Route>
+          <Route index element={<Home />} />
         </Routes>
       </BrowserRouter>
     </S.AppContainer>
