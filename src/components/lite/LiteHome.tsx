@@ -13,7 +13,7 @@ interface LiteContextType {
 }
 
 export const LiteContext = createContext<LiteContextType>({
-  encodedSchedule: '',
+  encodedSchedule: '가',
   setEncodedSchedule: () => {},
   selectedUser: '',
   setSelectedUser: () => {},
@@ -28,7 +28,7 @@ export const useLiteContext = () => {
 };
 
 const LiteProvider = ({ children }: { children: ReactNode }) => {
-  const [encodedSchedule, setEncodedSchedule] = useState('');
+  const [encodedSchedule, setEncodedSchedule] = useState('가');
   const [selectedUser, setSelectedUser] = useState('');
 
   return (
