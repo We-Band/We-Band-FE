@@ -11,6 +11,10 @@ const LiteLayout = () => {
     navigate(`/lite`);
   };
 
+  const handleClickHome = () => {
+    navigate(`/`);
+  };
+
   return (
     <S.LiteLayoutContainer>
       <S.LogoContainer>
@@ -24,7 +28,8 @@ const LiteLayout = () => {
 
       <S.FooterBackground>
         <S.FooterContainer>
-          <FooterLogo />
+          <FooterLogo onClick={handleClickHome} />
+
           <S.FooterLinkContainer>
             <S.FooterLink
               href="https://glacier-borogovia-7b5.notion.site/We-Band-Lite-1ccdf3d703f28039b961c72d95d691d3"
