@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { postKakaoLogin } from '@api/auth';
 import { useAuthStore } from '@store/auth';
+import NavBar from '@layout/main/navBar/NavBar';
 
 const Home = () => {
   const login = useAuthStore((state) => state.login);
@@ -13,6 +14,7 @@ const Home = () => {
 
   useEffect(() => {
     const code = searchParams.get('code');
+    console.log(code);
 
     if (code) {
       postKakaoLogin(code)
@@ -20,7 +22,6 @@ const Home = () => {
           if (data) {
             login(data.access_token);
             localStorage.setItem('refreshToken', data.refresh_token);
-            // console.log(data);
             navigate('/');
           }
         })
@@ -38,6 +39,7 @@ const Home = () => {
         <>
           <h1>HOME</h1>
           <button onClick={logout}>로그아웃</button>
+          <NavBar />
         </>
       )}
     </S.HomeContainer>
