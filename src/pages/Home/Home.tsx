@@ -6,7 +6,7 @@ const Home = () => {
 
   return (
     <S.HomeContainer>
-      <h1>HOME</h1>
+      <h1>캘린더 홈</h1>
       <button onClick={logout}>로그아웃</button>
     </S.HomeContainer>
   );

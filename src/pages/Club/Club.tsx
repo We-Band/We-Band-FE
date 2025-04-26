@@ -1,7 +1,7 @@
 import { useAuthStore } from '@store/auth';
 import * as S from './Club.styled';
 
-const My = () => {
+const Club = () => {
   const { logout } = useAuthStore();
 
   return (
@@ -11,4 +11,4 @@ const My = () => {
   );
 };
 
-export default My;
+export default Club;

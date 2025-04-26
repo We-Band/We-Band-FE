@@ -9,6 +9,8 @@ import useAlertStore from '@store/alert';
 import OnBoarding from '@pages/OnBoarding/OnBoarding';
 import ProtectedRoute from '@components/protectedRoute/ProtectedRoute';
 import Auth from '@pages/Auth/Auth';
+import Club from '@pages/Club/Club';
+import My from '@pages/My/My';
 
 function App() {
   const alert = useAlertStore((state) => state.alert);
@@ -28,11 +30,13 @@ function App() {
           </Route>
 
           <Route path="onboarding" element={<OnBoarding />} />
-          <Route path="/auth-callback" element={<Auth />} />
+          <Route path="auth-callback" element={<Auth />} />
 
           <Route element={<ProtectedRoute />}>
             <Route element={<MainLayout />}>
               <Route index element={<Home />} />
+              <Route path="club" element={<Club />} />
+              <Route path="my" element={<My />} />
             </Route>
           </Route>
         </Routes>
