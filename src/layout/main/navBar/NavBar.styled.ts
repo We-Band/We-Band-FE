@@ -8,6 +8,7 @@ export const NavBarContainer = styled.div`
   justify-content: space-between;
   position: fixed;
   bottom: 0px;
+  z-index: 1000;
 
   border-radius: 16px 16px 0px 0px;
   background: ${({ theme }) => theme.colors.Gray.gray100};
