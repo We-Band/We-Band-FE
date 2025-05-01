@@ -1,6 +1,6 @@
-import React from 'react';
-
+import React, { useState } from 'react';
 import * as S from './BottomSheet.styled';
+import Dropdown, { DropdownOption } from '../../components/dropdown/Dropdown';
 
 interface ClubListItemProps {
   name: string;
@@ -14,14 +14,55 @@ interface BottomSheetProps {
 }
 
 const ClubListItem: React.FC<ClubListItemProps> = ({ name, leader, members }) => {
+  const [showOptions, setShowOptions] = useState(false);
+
+  const handleToggleOptions = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setShowOptions(!showOptions);
+  };
+
+  const getClubOptions = (clubName: string): DropdownOption[] => {
+    return [
+      {
+        id: 'copy-code',
+        label: '동아리 코드 복사하기',
+        onClick: (e: React.MouseEvent) => {
+          console.log(`Copy club code for ${clubName}`);
+        }
+      },
+      {
+        id: 'view-info',
+        label: '동아리 정보 보기',
+        onClick: (e: React.MouseEvent) => {
+          console.log(`View info for ${clubName}`);
+        }
+      },
+      {
+        id: 'leave-club',
+        label: '동아리 탈퇴하기',
+        onClick: (e: React.MouseEvent) => {
+          console.log(`Leave club ${clubName}`);
+        }
+      }
+    ];
+  };
+
   return (
-    <S.ClubListItemContainer>
+    <S.ClubListItemContainer onClick={(e) => e.stopPropagation()}>
       <S.ClubImage />
       <S.ClubInfoContainer>
         <S.ClubName>{name}</S.ClubName>
         <S.ClubInfo>{leader}, 멤버 {members}명</S.ClubInfo>
       </S.ClubInfoContainer>
-      <S.DotsButton />
+      <div style={{ position: 'relative' }}>
+        <S.DotsButton onClick={handleToggleOptions} />
+        {showOptions && (
+          <Dropdown
+            options={getClubOptions(name)}
+            onClose={() => setShowOptions(false)}
+          />
+        )}
+      </div>
     </S.ClubListItemContainer>
   );
 };

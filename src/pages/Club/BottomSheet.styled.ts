@@ -13,7 +13,7 @@ export const BottomSheetOverlay = styled.div`
   flex-direction: column;
   justify-content: flex-end;
   align-items: center;
-  z-index: 900;
+  z-index: 100;
 `;
 
 export const BottomSheetContent = styled.div`
@@ -91,6 +91,9 @@ export const DotsButton = styled.div`
   height: 48px;
   background-size: cover;
   margin-left: auto;
+  cursor: pointer;
+  position: relative;
+  z-index: 110;
 `;
 
 export const ClubName = styled.div`
