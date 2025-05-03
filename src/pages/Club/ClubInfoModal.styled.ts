@@ -35,13 +35,31 @@ export const ClubImageContainer = styled.div`
   display: flex;
   justify-content: center;
   margin-bottom: 4px;
+  position: relative;
+  width: 72px;
+  height: 72px;
+  margin-left: auto;
+  margin-right: auto;
 `;
 
 export const ClubImage = styled.div`
   width: 72px;
   height: 72px;
   border-radius: 40px;
-  background-color: #ccc;
+  background-color: ${colors.Gray.gray300};
+`;
+
+export const PhotoEditButton = styled.div`
+  position: absolute;
+  right: -4px;
+  bottom: -4px;
+  background-image: url('/src/assets/icons/image-change.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  z-index: 5;
 `;
 
 export const HeaderTitle = styled.h2`
@@ -167,3 +185,40 @@ export const ButtonContainer = styled.div`
   width: 100%;
 `;
 
+export const LeaderControlsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 8px;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const PenLineIcon = styled.div`
+  background-image: url('/src/assets/icons/pen-line.svg');
+  width: 20px;
+  height: 20px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+`;
+
+export const EditInfoButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  width: 181px;
+  height: 32px;
+  background-color: ${colors.Gray.gray100};
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  justify-content: center;
+  color: ${colors.Gray.gray600};
+  ${fontStyles.S02_Medium}
+  
+  &:hover {
+    background-color: ${colors.Gray.gray300};
+  }
+`;
