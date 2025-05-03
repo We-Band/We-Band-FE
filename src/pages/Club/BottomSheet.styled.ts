@@ -61,10 +61,9 @@ export const BottomSheetTitle = styled.div`
 export const ClubListItemContainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   padding: 12px 16px;
-  gap: 20px;
   width: 100%;
   height: 80px;
   background: ${colors.Gray.gray100};
@@ -77,12 +76,15 @@ export const ClubImage = styled.div`
   height: 56px;
   background-color: #ccc;
   border-radius: 28px;
+  flex-shrink: 0;
 `;
 
 export const ClubInfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin-left: 20px;
+  flex: 1;
 `;
 
 export const DotsButton = styled.div`
@@ -90,10 +92,10 @@ export const DotsButton = styled.div`
   width: 24px;
   height: 48px;
   background-size: cover;
-  margin-left: auto;
   cursor: pointer;
   position: relative;
   z-index: 110;
+  flex-shrink: 0;
 `;
 
 export const ClubName = styled.div`
