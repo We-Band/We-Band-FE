@@ -2,12 +2,19 @@ import React, { useState, useCallback } from 'react';
 import * as S from './BottomSheet.styled';
 import Dropdown, { DropdownOption } from '../../components/dropdown/Dropdown';
 import Alert from '../../components/alert/Alert';
+import ClubInfoModal from './ClubInfoModal';
 
-interface ClubListItemProps {
+interface Club {
+  id: number;
   name: string;
   leader: string;
   members: number;
+}
+
+interface ClubListItemProps {
+  club: Club;
   showAlertMessage: () => void;
+  showClubInfo: (clubId: number) => void;
 }
 
 interface BottomSheetProps {
@@ -36,7 +43,17 @@ const generateClubInviteText = (clubName: string, clubCode: string): string => {
   return `${clubName}의 동아리 코드예요!\n동아리를 추가해 동아리 활동에 참여해보세요.\n${clubCode}\n${appUrl}`;
 };
 
-const ClubListItem: React.FC<ClubListItemProps> = ({ name, leader, members, showAlertMessage }) => {
+// 샘플 클럽 데이터
+const CLUBS: Club[] = [
+  { id: 1, name: "위밴드 1기", leader: "정유진", members: 8 },
+  { id: 2, name: "낭만청춘사랑", leader: "박성진", members: 3 },
+  { id: 3, name: "크루거", leader: "김서수", members: 5 },
+  { id: 4, name: "다이나믹", leader: "유지훈", members: 4 },
+  { id: 5, name: "반달", leader: "현도윤", members: 6 },
+  { id: 6, name: "모닝글로리", leader: "김민준", members: 7 }
+];
+
+const ClubListItem: React.FC<ClubListItemProps> = ({ club, showAlertMessage, showClubInfo }) => {
   const [showOptions, setShowOptions] = useState(false);
 
   const handleToggleOptions = (e: React.MouseEvent) => {
@@ -44,7 +61,7 @@ const ClubListItem: React.FC<ClubListItemProps> = ({ name, leader, members, show
     setShowOptions(!showOptions);
   };
 
-  const getClubOptions = (clubName: string): DropdownOption[] => {
+  const getClubOptions = (club: Club): DropdownOption[] => {
     return [
       {
         id: 'copy-code',
@@ -54,7 +71,7 @@ const ClubListItem: React.FC<ClubListItemProps> = ({ name, leader, members, show
           const clubCode = generateClubCode();
           
           // 복사할 텍스트 생성
-          const textToCopy = generateClubInviteText(clubName, clubCode);
+          const textToCopy = generateClubInviteText(club.name, clubCode);
           
           try {
             // 클립보드 API를 직접 사용
@@ -77,14 +94,15 @@ const ClubListItem: React.FC<ClubListItemProps> = ({ name, leader, members, show
         id: 'view-info',
         label: '동아리 정보 보기',
         onClick: (e: React.MouseEvent) => {
-          console.log(`View info for ${name}`);
+          setShowOptions(false); // 옵션 메뉴 닫기
+          showClubInfo(club.id);
         }
       },
       {
         id: 'leave-club',
         label: '동아리 탈퇴하기',
         onClick: (e: React.MouseEvent) => {
-          console.log(`Leave club ${name}`);
+          console.log(`Leave club ${club.name}`);
         }
       }
     ];
@@ -94,14 +112,14 @@ const ClubListItem: React.FC<ClubListItemProps> = ({ name, leader, members, show
     <S.ClubListItemContainer onClick={(e) => e.stopPropagation()}>
       <S.ClubImage />
       <S.ClubInfoContainer>
-        <S.ClubName>{name}</S.ClubName>
-        <S.ClubInfo>{leader}, 멤버 {members}명</S.ClubInfo>
+        <S.ClubName>{club.name}</S.ClubName>
+        <S.ClubInfo>{club.leader}, 멤버 {club.members}명</S.ClubInfo>
       </S.ClubInfoContainer>
       <div style={{ position: 'relative' }}>
         <S.DotsButton onClick={handleToggleOptions} />
         {showOptions && (
           <Dropdown
-            options={getClubOptions(name)}
+            options={getClubOptions(club)}
             onClose={() => setShowOptions(false)}
           />
         )}
@@ -112,6 +130,8 @@ const ClubListItem: React.FC<ClubListItemProps> = ({ name, leader, members, show
 
 const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen, onClose }) => {
   const [showAlert, setShowAlert] = useState(false);
+  const [showClubInfoModal, setShowClubInfoModal] = useState(false);
+  const [selectedClubId, setSelectedClubId] = useState<number | null>(null);
 
   const showAlertMessage = useCallback(() => {
     console.log('알림 메시지 표시 요청');
@@ -120,6 +140,15 @@ const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen, onClose }) => {
 
   const handleCloseAlert = useCallback(() => {
     setShowAlert(false);
+  }, []);
+
+  const handleShowClubInfo = useCallback((clubId: number) => {
+    setSelectedClubId(clubId);
+    setShowClubInfoModal(true);
+  }, []);
+
+  const handleCloseClubInfoModal = useCallback(() => {
+    setShowClubInfoModal(false);
   }, []);
 
   const handleAddClub = () => {
@@ -136,6 +165,15 @@ const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen, onClose }) => {
           <Alert onClose={handleCloseAlert} />
         </div>
       )}
+      
+      {selectedClubId !== null && (
+        <ClubInfoModal
+          isOpen={showClubInfoModal}
+          onClose={handleCloseClubInfoModal}
+          clubId={1} // {selectedClubId}
+        />
+      )}
+      
       <S.BottomSheetOverlay onClick={onClose}>
         <S.BottomSheetContent onClick={(e: React.MouseEvent) => e.stopPropagation()}>
           <S.TitleContainer>
@@ -143,12 +181,14 @@ const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen, onClose }) => {
             <S.AddButton onClick={handleAddClub} />
           </S.TitleContainer>
           <S.ClubListContainer>
-            <ClubListItem name="위밴드 1기" leader="정유진" members={8} showAlertMessage={showAlertMessage} />
-            <ClubListItem name="낭만청춘사랑" leader="박성진" members={3} showAlertMessage={showAlertMessage} />
-            <ClubListItem name="크루거" leader="김서수" members={5} showAlertMessage={showAlertMessage} />
-            <ClubListItem name="다이나믹" leader="유지훈" members={4} showAlertMessage={showAlertMessage} />
-            <ClubListItem name="반달" leader="현도윤" members={6} showAlertMessage={showAlertMessage} />
-            <ClubListItem name="모닝글로리" leader="김민준" members={7} showAlertMessage={showAlertMessage} />
+            {CLUBS.map(club => (
+              <ClubListItem 
+                key={club.id}
+                club={club}
+                showAlertMessage={showAlertMessage}
+                showClubInfo={handleShowClubInfo}
+              />
+            ))}
           </S.ClubListContainer>
         </S.BottomSheetContent>
       </S.BottomSheetOverlay>

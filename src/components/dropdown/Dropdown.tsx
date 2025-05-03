@@ -10,9 +10,15 @@ export interface DropdownOption {
 interface DropdownProps {
   options: DropdownOption[];
   onClose: () => void;
+  position?: {
+    top?: string | number;
+    bottom?: string | number;
+    left?: string | number;
+    right?: string | number;
+  };
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ options, onClose }) => {
+const Dropdown: React.FC<DropdownProps> = ({ options, onClose, position }) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // 드롭다운 외부 클릭 감지를 위한 이벤트 핸들러
@@ -33,7 +39,11 @@ const Dropdown: React.FC<DropdownProps> = ({ options, onClose }) => {
   }, [onClose]);
 
   return (
-    <S.DropdownContainer ref={dropdownRef} onClick={(e: React.MouseEvent) => e.stopPropagation()}>
+    <S.DropdownContainer 
+      ref={dropdownRef} 
+      onClick={(e: React.MouseEvent) => e.stopPropagation()}
+      style={position}
+    >
       {options.map((option) => (
         <S.DropdownItem 
           key={option.id}
