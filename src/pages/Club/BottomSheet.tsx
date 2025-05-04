@@ -3,6 +3,8 @@ import * as S from './BottomSheet.styled';
 import Dropdown, { DropdownOption } from '../../components/dropdown/Dropdown';
 import Alert from '../../components/alert/Alert';
 import ClubInfoModal from './ClubInfoModal';
+import Confirm from '../../components/confirm/Confirm';
+import { AccentText } from '../../components/confirm/Confirm.styled';
 
 interface Club {
   id: number;
@@ -55,11 +57,40 @@ const CLUBS: Club[] = [
 
 const ClubListItem: React.FC<ClubListItemProps> = ({ club, showAlertMessage, showClubInfo }) => {
   const [showOptions, setShowOptions] = useState(false);
+  const [showLeaveModal, setShowLeaveModal] = useState(false);
 
   const handleToggleOptions = (e: React.MouseEvent) => {
     e.stopPropagation();
     setShowOptions(!showOptions);
   };
+
+  function renderLeaveModal() {
+    if (!showLeaveModal) return null;
+
+    const titleWithAccent = (
+      <>
+        정말 <AccentText>{club.name}</AccentText> 동아리를<br />탈퇴하시겠어요?
+      </>
+    );
+
+    return (
+      <Confirm
+        isOpen={showLeaveModal}
+        titleWithAccent={titleWithAccent}
+        description="동아리를 탈퇴한 후에는 초대코드를 입력해 동아리에 다시 가입할 수 있어요."
+        confirmText="탈퇴하기"
+        cancelText="취소하기"
+        onConfirm={() => {
+          // 실제 API 호출 코드로 대체할 부분
+          console.log(`${club.name} 동아리 탈퇴 완료`);
+          setShowLeaveModal(false);
+          // 임시로 성공 처리
+          alert(`${club.name} 동아리에서 탈퇴했습니다.`);
+        }}
+        onCancel={() => setShowLeaveModal(false)}
+      />
+    );
+  }
 
   const getClubOptions = (club: Club): DropdownOption[] => {
     return [
@@ -102,7 +133,8 @@ const ClubListItem: React.FC<ClubListItemProps> = ({ club, showAlertMessage, sho
         id: 'leave-club',
         label: '동아리 탈퇴하기',
         onClick: (e: React.MouseEvent) => {
-          console.log(`Leave club ${club.name}`);
+          setShowOptions(false); // 옵션 메뉴 닫기
+          setShowLeaveModal(true);
         }
       }
     ];
@@ -124,6 +156,7 @@ const ClubListItem: React.FC<ClubListItemProps> = ({ club, showAlertMessage, sho
           />
         )}
       </div>
+      {renderLeaveModal()}
     </S.ClubListItemContainer>
   );
 };
