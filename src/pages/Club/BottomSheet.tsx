@@ -5,6 +5,7 @@ import Alert from '../../components/alert/Alert';
 import ClubInfoModal from './ClubInfoModal';
 import Confirm from '../../components/confirm/Confirm';
 import { AccentText } from '../../components/confirm/Confirm.styled';
+import ConfirmInput from '../../components/confirm/ConfirmInput';
 
 interface Club {
   id: number;
@@ -15,7 +16,7 @@ interface Club {
 
 interface ClubListItemProps {
   club: Club;
-  showAlertMessage: () => void;
+  showAlertMessage: (message?: string) => void;
   showClubInfo: (clubId: number) => void;
 }
 
@@ -113,11 +114,11 @@ const ClubListItem: React.FC<ClubListItemProps> = ({ club, showAlertMessage, sho
               })
               .catch(err => {
                 console.error('클립보드 복사 실패:', err);
-                showAlertMessage();
+                showAlertMessage('클립보드 복사에 실패했습니다. 다시 시도해주세요.');
               });
           } catch (error) {
             console.error('클립보드 작업 중 오류:', error);
-            showAlertMessage();
+            showAlertMessage('클립보드 복사에 실패했습니다. 다시 시도해주세요.');
           }
         }
       },
@@ -165,9 +166,15 @@ const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen, onClose }) => {
   const [showAlert, setShowAlert] = useState(false);
   const [showClubInfoModal, setShowClubInfoModal] = useState(false);
   const [selectedClubId, setSelectedClubId] = useState<number | null>(null);
+  const [showAddOptions, setShowAddOptions] = useState(false);
+  const [showClubCodeInput, setShowClubCodeInput] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
 
-  const showAlertMessage = useCallback(() => {
-    console.log('알림 메시지 표시 요청');
+  const showAlertMessage = useCallback((message?: string) => {
+    console.log('알림 메시지 표시 요청:', message);
+    if (message) {
+      setAlertMessage(message);
+    }
     setShowAlert(true);
   }, []);
 
@@ -184,9 +191,53 @@ const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen, onClose }) => {
     setShowClubInfoModal(false);
   }, []);
 
-  const handleAddClub = () => {
-    console.log('Add new club');
-    // 동아리 추가 기능
+  const handleAddClub = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setShowAddOptions(!showAddOptions);
+  };
+
+  const handleEnterClubCode = () => {
+    console.log('동아리 코드 입력하기');
+    setShowAddOptions(false);
+    setShowClubCodeInput(true);
+  };
+
+  const handleSubmitClubCode = (code: string) => {
+    console.log('입력된 동아리 코드:', code);
+    
+    // 코드 유효성 검사 (16자리인지 확인)
+    if (code.length !== 16) {
+      showAlertMessage('유효하지 않은 동아리 코드입니다.');
+      return;
+    }
+    
+    // 서버에 코드 전송 로직 (여기서는 임시로 성공 메시지 표시)
+    // 실제로는 API 호출 후 응답에 따라 처리해야 함
+    setShowClubCodeInput(false);
+    showAlertMessage('동아리 가입이 완료되었어요!');
+    
+    // TODO: 성공 시 동아리 목록 새로고침 로직 추가
+  };
+
+  const handleCreateNewClub = () => {
+    console.log('새로운 동아리 만들기');
+    setShowAddOptions(false);
+    // 여기에 새로운 동아리 만들기 페이지로 이동하는 로직을 추가할 수 있습니다.
+  };
+
+  const getAddClubOptions = (): DropdownOption[] => {
+    return [
+      {
+        id: 'enter-code',
+        label: '동아리 코드 입력하기',
+        onClick: handleEnterClubCode
+      },
+      {
+        id: 'create-new',
+        label: '새로운 동아리 만들기',
+        onClick: handleCreateNewClub
+      }
+    ];
   };
 
   if (!isOpen) return null;
@@ -195,7 +246,10 @@ const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen, onClose }) => {
     <>
       {showAlert && (
         <div style={{ position: 'fixed', bottom: '90px', left: '50%', transform: 'translateX(-50%)', zIndex: 9999 }}>
-          <Alert onClose={handleCloseAlert} />
+          <Alert 
+            message={alertMessage} 
+            onClose={handleCloseAlert} 
+          />
         </div>
       )}
       
@@ -207,11 +261,41 @@ const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen, onClose }) => {
         />
       )}
       
+      <ConfirmInput
+        isOpen={showClubCodeInput}
+        title="가입할 동아리 코드를 입력하세요"
+        description="동아리 초대 코드를 입력해 동아리에 가입해 보세요. 초대 코드는 더보기에서 동아리 코드를 복사하면 친구에게 공유할 수 있어요."
+        placeholder="동아리 초대 코드 16자리"
+        confirmText="입력하기"
+        cancelText="취소하기"
+        onConfirm={handleSubmitClubCode}
+        onCancel={() => setShowClubCodeInput(false)}
+        maxLength={16}
+      />
+      
       <S.BottomSheetOverlay onClick={onClose}>
         <S.BottomSheetContent onClick={(e: React.MouseEvent) => e.stopPropagation()}>
           <S.TitleContainer>
             <S.BottomSheetTitle>동아리 목록</S.BottomSheetTitle>
-            <S.AddButton onClick={handleAddClub} />
+            <div style={{ position: 'relative', display: 'inline-block' }}>
+              <S.AddButton onClick={handleAddClub} />
+              {showAddOptions && (
+                <div 
+                  style={{
+                    position: 'absolute',
+                    top: '-20px',
+                    right: 0,
+                    zIndex: 9999,
+                    minWidth: '196px'
+                  }}
+                >
+                  <Dropdown
+                    options={getAddClubOptions()}
+                    onClose={() => setShowAddOptions(false)}
+                  />
+                </div>
+              )}
+            </div>
           </S.TitleContainer>
           <S.ClubListContainer>
             {CLUBS.map(club => (
@@ -224,7 +308,7 @@ const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen, onClose }) => {
             ))}
           </S.ClubListContainer>
         </S.BottomSheetContent>
-      </S.BottomSheetOverlay>
+      </S.BottomSheetOverlay>16
     </>
   );
 };
