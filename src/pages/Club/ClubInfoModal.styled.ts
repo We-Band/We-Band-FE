@@ -80,7 +80,17 @@ export const InfoContainer = styled.div`
 export const InfoRow = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
 `;
+
+export const InfoRowEdit = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 17px;
+  height: 36px;
+`;
+
 
 export const InfoLabel = styled.div`
   ${fontStyles.S02_Medium}
@@ -89,6 +99,12 @@ export const InfoLabel = styled.div`
 
 export const InfoValue = styled.div`
   ${fontStyles.S02_Medium}
+  color: ${colors.Gray.gray800};
+  text-align: right;
+`;
+
+export const InfoValueBold = styled.div`
+  ${fontStyles.S03_Bold}
   color: ${colors.Gray.gray800};
   text-align: right;
 `;
@@ -183,6 +199,7 @@ export const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
+  gap: 20px;
 `;
 
 export const LeaderControlsContainer = styled.div`

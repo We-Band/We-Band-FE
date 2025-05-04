@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import * as S from './ClubInfoModal.styled';
 import Dropdown, { DropdownOption } from '../../components/dropdown/Dropdown';
 import Button from '../../components/button';
-import ClubInfoModalEdit from './ClubInfoModalEdit';
+import InputField from '../../components/inputField/InputField';
 
 interface ClubMember {
   id: string;
@@ -24,13 +24,13 @@ interface ClubInfoModalProps {
   clubId: number;
 }
 
-function ClubInfoModal({ isOpen, onClose, clubId }: ClubInfoModalProps) {
+function ClubInfoModalEdit({ isOpen, onClose, clubId }: ClubInfoModalProps) {
   const [clubInfo, setClubInfo] = useState<ClubInfo | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isLeader, setIsLeader] = useState(false);
   const [showDropdown, setShowDropdown] = useState<string | null>(null);
-  const [showEditModal, setShowEditModal] = useState(false);
+  const [clubName, setClubName] = useState('');
 
   useEffect(() => {
     if (isOpen && clubId) {
@@ -98,128 +98,27 @@ function ClubInfoModal({ isOpen, onClose, clubId }: ClubInfoModalProps) {
       
       // 딜레이를 주어 API 호출 시뮬레이션
       setTimeout(() => {
-        resolve(mockClubs[id] || {
+        const clubData = mockClubs[id] || {
           name: '알 수 없는 동아리',
           createdAt: '-',
           memberCount: 0,
           clubCode: '-',
           members: []
-        });
+        };
+        
+        setClubName(clubData.name);
+        resolve(clubData);
       }, 300);
     });
   }
 
-  function handleDotsClick(memberId: string) {
-    setShowDropdown(showDropdown === memberId ? null : memberId);
-  }
-
-  function getDropdownOptions(member: ClubMember): DropdownOption[] {
-    if (isLeader) {
-      return [
-        {
-          id: 'view-schedule',
-          label: '멤버 일정 보기',
-          onClick: (e) => {
-            e.stopPropagation();
-            console.log(`${member.name}의 일정 보기`);
-            setShowDropdown(null);
-          }
-        },
-        {
-          id: 'delegate',
-          label: '권한 위임하기',
-          onClick: (e) => {
-            e.stopPropagation();
-            console.log(`${member.name}에게 권한 위임`);
-            setShowDropdown(null);
-          }
-        },
-        {
-          id: 'remove',
-          label: '이 멤버 내보내기',
-          onClick: (e) => {
-            e.stopPropagation();
-            console.log(`${member.name} 내보내기`);
-            setShowDropdown(null);
-          }
-        }
-      ];
-    }
-    
-    return [
-      {
-        id: 'view-schedule',
-        label: '멤버 일정 보기',
-        onClick: (e) => {
-          e.stopPropagation();
-          console.log(`${member.name}의 일정 보기`);
-          setShowDropdown(null);
-        }
-      }
-    ];
-  }
-
-  function renderLeaderControls() {
-    if (!isLeader || !clubInfo) return null;
-
-    return (
-      <S.LeaderControlsContainer>
-        <S.EditInfoButton onClick={() => setShowEditModal(true)}>
-          <S.PenLineIcon />
-          동아리 정보 수정하기
-        </S.EditInfoButton>
-      </S.LeaderControlsContainer>
-    );
-  }
-
-  function renderMemberList() {
-    if (!clubInfo) return null;
-
-    return (
-      <S.MemberList>
-        {clubInfo.members.map((member) => (
-          <S.MemberItem key={member.id}>
-            <S.MemberInfo>
-              <S.MemberName>
-                {member.name}
-              </S.MemberName>
-              {member.isLeader && <S.LeaderIcon />}
-            </S.MemberInfo>
-            <S.MemberActions>
-              <div style={{ position: 'relative' }}>
-                <S.DotsButton onClick={(e) => {
-                  e.stopPropagation();
-                  handleDotsClick(member.id);
-                }} />
-                {showDropdown === member.id && (
-                  <Dropdown 
-                    options={getDropdownOptions(member)} 
-                    onClose={() => setShowDropdown(null)} 
-                    position={{
-                      top: '24px',
-                      right: '0px'
-                    }}
-                  />
-                )}
-              </div>
-            </S.MemberActions>
-          </S.MemberItem>
-        ))}
-      </S.MemberList>
-    );
-  }
-
   if (!isOpen) return null;
-  
-  if (showEditModal) {
-    return <ClubInfoModalEdit isOpen={true} onClose={() => setShowEditModal(false)} clubId={clubId} />;
-  }
 
   return (
     <S.ModalOverlay onClick={onClose}>
       <S.ModalContent onClick={(e) => e.stopPropagation()}>
         <S.ModalHeader>
-          <S.HeaderTitle>동아리 정보</S.HeaderTitle>
+          <S.HeaderTitle>동아리 정보 수정하기</S.HeaderTitle>
         </S.ModalHeader>
         
         {isLoading ? (
@@ -230,40 +129,59 @@ function ClubInfoModal({ isOpen, onClose, clubId }: ClubInfoModalProps) {
           <>
             <S.ClubImageContainer>
               <S.ClubImage />
+                <S.PhotoEditButton 
+                  onClick={() => console.log('사진 변경')} 
+                />
             </S.ClubImageContainer>
-
-            {renderLeaderControls()}
             
             <S.InfoContainer>
-              <S.InfoRow>
+              <S.InfoRowEdit>
                 <S.InfoLabel>동아리 이름</S.InfoLabel>
-                <S.InfoValueBold>{clubInfo.name}</S.InfoValueBold>
-              </S.InfoRow>
-              <S.InfoRow>
+                <div style={{ flex: 1 }}>
+                  <InputField 
+                    defaultValue={clubName} 
+                    showPenIcon={true} 
+                    placeholder="이름을 입력해 주세요." 
+                    onChange={(value) => setClubName(value)}
+                  />
+                </div>
+              </S.InfoRowEdit>
+              <S.InfoRowEdit>
                 <S.InfoLabel>개설일자</S.InfoLabel>
                 <S.InfoValue>{clubInfo.createdAt}</S.InfoValue>
-              </S.InfoRow>
-              <S.InfoRow>
+              </S.InfoRowEdit>
+              <S.InfoRowEdit>
                 <S.InfoLabel>멤버수</S.InfoLabel>
                 <S.InfoValue>{clubInfo.memberCount}명</S.InfoValue>
-              </S.InfoRow>
-              <S.InfoRow>
+              </S.InfoRowEdit>
+              <S.InfoRowEdit>
                 <S.InfoLabel>동아리 코드</S.InfoLabel>
-                <S.InfoValue>{clubInfo.clubCode}</S.InfoValue>
-              </S.InfoRow>
+                <div style={{ flex: 1 }}>
+                  <InputField 
+                    defaultValue={clubInfo.clubCode} 
+                    showPenIcon={true} 
+                    placeholder="코드를 입력해 주세요." 
+                    onChange={(value) => console.log('코드 변경:', value)}
+                  />
+                </div>
+              </S.InfoRowEdit>
             </S.InfoContainer>
             
-            
-            <S.MemberSection>
-              <S.SectionTitle>동아리 멤버</S.SectionTitle>
-              {renderMemberList()}
-            </S.MemberSection>
             <S.ButtonContainer>
               <Button 
-                text="확인" 
-                buttonType="primary" 
-                width='160px'
+                text="취소하기" 
+                buttonType="secondary" 
+                width='140px'
                 onClick={onClose} 
+              />
+              <Button 
+                text="수정하기" 
+                buttonType="primary" 
+                width='140px'
+                onClick={() => {
+                  console.log('수정 완료:', { clubName });
+                  onClose();
+                }} 
               />
             </S.ButtonContainer>
           </>
@@ -275,4 +193,4 @@ function ClubInfoModal({ isOpen, onClose, clubId }: ClubInfoModalProps) {
   );
 }
 
-export default ClubInfoModal;
+export default ClubInfoModalEdit;
