@@ -3,6 +3,9 @@ import * as S from './ClubInfoModal.styled';
 import Dropdown, { DropdownOption } from '../../components/dropdown/Dropdown';
 import Button from '../../components/button';
 import ClubInfoModalEdit from './ClubInfoModalEdit';
+import Confirm from '../../components/confirm';
+import { AccentText } from '../../components/confirm/Confirm.styled';
+import Alert from '../../components/alert/Alert';
 
 interface ClubMember {
   id: string;
@@ -31,6 +34,8 @@ function ClubInfoModal({ isOpen, onClose, clubId }: ClubInfoModalProps) {
   const [isLeader, setIsLeader] = useState(false);
   const [showDropdown, setShowDropdown] = useState<string | null>(null);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showDelegateModal, setShowDelegateModal] = useState(false);
+  const [selectedMember, setSelectedMember] = useState<ClubMember | null>(null);
 
   useEffect(() => {
     if (isOpen && clubId) {
@@ -130,7 +135,8 @@ function ClubInfoModal({ isOpen, onClose, clubId }: ClubInfoModalProps) {
           label: '권한 위임하기',
           onClick: (e) => {
             e.stopPropagation();
-            console.log(`${member.name}에게 권한 위임`);
+            setSelectedMember(member);
+            setShowDelegateModal(true);
             setShowDropdown(null);
           }
         },
@@ -209,6 +215,36 @@ function ClubInfoModal({ isOpen, onClose, clubId }: ClubInfoModalProps) {
     );
   }
 
+  function renderDelegateModal() {
+    if (!showDelegateModal || !selectedMember) return null;
+
+    const titleWithAccent = (
+      <>
+        <AccentText>{selectedMember.name}</AccentText> 님께 회장 권한을{'\n'}위임하시겠어요?
+      </>
+    );
+
+    return (
+      <Confirm
+        isOpen={showDelegateModal}
+        titleWithAccent={titleWithAccent}
+        description="위임 시 회장이 변경되고, 전체 권한은 이 멤버에게만 주어져요. 권한 위임 후에는 되돌릴 수 없어요."
+        confirmText="권한 위임하기"
+        cancelText="취소"
+        onConfirm={() => {
+          // 실제 API 호출 코드로 대체할 부분
+          console.log(`${selectedMember.name}에게 권한 위임 완료`);
+          setShowDelegateModal(false);
+          // 임시로 성공 처리
+          // Alert 컴포넌트 구현이 완료되면 활성화
+          // setShowAlert(true);
+          alert(`${selectedMember.name}님에게 권한을 위임했습니다.`);
+        }}
+        onCancel={() => setShowDelegateModal(false)}
+      />
+    );
+  }
+
   if (!isOpen) return null;
   
   if (showEditModal) {
@@ -216,62 +252,65 @@ function ClubInfoModal({ isOpen, onClose, clubId }: ClubInfoModalProps) {
   }
 
   return (
-    <S.ModalOverlay onClick={onClose}>
-      <S.ModalContent onClick={(e) => e.stopPropagation()}>
-        <S.ModalHeader>
-          <S.HeaderTitle>동아리 정보</S.HeaderTitle>
-        </S.ModalHeader>
-        
-        {isLoading ? (
-          <div style={{ padding: '24px', textAlign: 'center' }}>로딩 중...</div>
-        ) : error ? (
-          <div style={{ padding: '24px', textAlign: 'center', color: 'red' }}>{error}</div>
-        ) : clubInfo ? (
-          <>
-            <S.ClubImageContainer>
-              <S.ClubImage />
-            </S.ClubImageContainer>
+    <>
+      <S.ModalOverlay onClick={onClose}>
+        <S.ModalContent onClick={(e) => e.stopPropagation()}>
+          <S.ModalHeader>
+            <S.HeaderTitle>동아리 정보</S.HeaderTitle>
+          </S.ModalHeader>
+          
+          {isLoading ? (
+            <div style={{ padding: '24px', textAlign: 'center' }}>로딩 중...</div>
+          ) : error ? (
+            <div style={{ padding: '24px', textAlign: 'center', color: 'red' }}>{error}</div>
+          ) : clubInfo ? (
+            <>
+              <S.ClubImageContainer>
+                <S.ClubImage />
+              </S.ClubImageContainer>
 
-            {renderLeaderControls()}
-            
-            <S.InfoContainer>
-              <S.InfoRow>
-                <S.InfoLabel>동아리 이름</S.InfoLabel>
-                <S.InfoValueBold>{clubInfo.name}</S.InfoValueBold>
-              </S.InfoRow>
-              <S.InfoRow>
-                <S.InfoLabel>개설일자</S.InfoLabel>
-                <S.InfoValue>{clubInfo.createdAt}</S.InfoValue>
-              </S.InfoRow>
-              <S.InfoRow>
-                <S.InfoLabel>멤버수</S.InfoLabel>
-                <S.InfoValue>{clubInfo.memberCount}명</S.InfoValue>
-              </S.InfoRow>
-              <S.InfoRow>
-                <S.InfoLabel>동아리 코드</S.InfoLabel>
-                <S.InfoValue>{clubInfo.clubCode}</S.InfoValue>
-              </S.InfoRow>
-            </S.InfoContainer>
-            
-            
-            <S.MemberSection>
-              <S.SectionTitle>동아리 멤버</S.SectionTitle>
-              {renderMemberList()}
-            </S.MemberSection>
-            <S.ButtonContainer>
-              <Button 
-                text="확인" 
-                buttonType="primary" 
-                width='160px'
-                onClick={onClose} 
-              />
-            </S.ButtonContainer>
-          </>
-        ) : (
-          <div style={{ padding: '24px', textAlign: 'center' }}>데이터가 없습니다.</div>
-        )}
-      </S.ModalContent>
-    </S.ModalOverlay>
+              {renderLeaderControls()}
+              
+              <S.InfoContainer>
+                <S.InfoRow>
+                  <S.InfoLabel>동아리 이름</S.InfoLabel>
+                  <S.InfoValueBold>{clubInfo.name}</S.InfoValueBold>
+                </S.InfoRow>
+                <S.InfoRow>
+                  <S.InfoLabel>개설일자</S.InfoLabel>
+                  <S.InfoValue>{clubInfo.createdAt}</S.InfoValue>
+                </S.InfoRow>
+                <S.InfoRow>
+                  <S.InfoLabel>멤버수</S.InfoLabel>
+                  <S.InfoValue>{clubInfo.memberCount}명</S.InfoValue>
+                </S.InfoRow>
+                <S.InfoRow>
+                  <S.InfoLabel>동아리 코드</S.InfoLabel>
+                  <S.InfoValue>{clubInfo.clubCode}</S.InfoValue>
+                </S.InfoRow>
+              </S.InfoContainer>
+              
+              
+              <S.MemberSection>
+                <S.SectionTitle>동아리 멤버</S.SectionTitle>
+                {renderMemberList()}
+              </S.MemberSection>
+              <S.ButtonContainer>
+                <Button 
+                  text="확인" 
+                  buttonType="primary" 
+                  width='160px'
+                  onClick={onClose} 
+                />
+              </S.ButtonContainer>
+            </>
+          ) : (
+            <div style={{ padding: '24px', textAlign: 'center' }}>데이터가 없습니다.</div>
+          )}
+        </S.ModalContent>
+      </S.ModalOverlay>
+      {renderDelegateModal()}
+    </>
   );
 }
 
