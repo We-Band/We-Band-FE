@@ -3,7 +3,7 @@ import * as S from './ClubInfoModal.styled';
 import Dropdown, { DropdownOption } from '../../components/dropdown/Dropdown';
 import Button from '../../components/button';
 import ClubInfoModalEdit from './ClubInfoModalEdit';
-import Confirm from '../../components/confirm';
+import Confirm from '../../components/confirm/Confirm';
 import { AccentText } from '../../components/confirm/Confirm.styled';
 import Alert from '../../components/alert/Alert';
 
