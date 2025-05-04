@@ -35,6 +35,7 @@ function ClubInfoModal({ isOpen, onClose, clubId }: ClubInfoModalProps) {
   const [showDropdown, setShowDropdown] = useState<string | null>(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDelegateModal, setShowDelegateModal] = useState(false);
+  const [showRemoveModal, setShowRemoveModal] = useState(false);
   const [selectedMember, setSelectedMember] = useState<ClubMember | null>(null);
 
   useEffect(() => {
@@ -145,7 +146,8 @@ function ClubInfoModal({ isOpen, onClose, clubId }: ClubInfoModalProps) {
           label: '이 멤버 내보내기',
           onClick: (e) => {
             e.stopPropagation();
-            console.log(`${member.name} 내보내기`);
+            setSelectedMember(member);
+            setShowRemoveModal(true);
             setShowDropdown(null);
           }
         }
@@ -245,6 +247,34 @@ function ClubInfoModal({ isOpen, onClose, clubId }: ClubInfoModalProps) {
     );
   }
 
+  function renderRemoveModal() {
+    if (!showRemoveModal || !selectedMember) return null;
+
+    const titleWithAccent = (
+      <>
+        정말 <AccentText>{selectedMember.name}</AccentText> 님을<br />동아리에서 내보내시겠어요?
+      </>
+    );
+
+    return (
+      <Confirm
+        isOpen={showRemoveModal}
+        titleWithAccent={titleWithAccent}
+        description="동아리에서 내보낸 멤버는 더 이상 동아리 일정을 확인할 수 없어요. 내보낸 이후에는 되돌릴 수 없어요."
+        confirmText="내보내기"
+        cancelText="취소하기"
+        onConfirm={() => {
+          // 실제 API 호출 코드로 대체할 부분
+          console.log(`${selectedMember.name} 멤버 내보내기 완료`);
+          setShowRemoveModal(false);
+          // 임시로 성공 처리
+          alert(`${selectedMember.name}님을 동아리에서 내보냈습니다.`);
+        }}
+        onCancel={() => setShowRemoveModal(false)}
+      />
+    );
+  }
+
   if (!isOpen) return null;
   
   if (showEditModal) {
@@ -310,6 +340,7 @@ function ClubInfoModal({ isOpen, onClose, clubId }: ClubInfoModalProps) {
         </S.ModalContent>
       </S.ModalOverlay>
       {renderDelegateModal()}
+      {renderRemoveModal()}
     </>
   );
 }
